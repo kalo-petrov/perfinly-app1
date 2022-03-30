@@ -51,7 +51,7 @@ const AdminNavbar = () => {
           <img
             className='user-profilepic'
             src={
-              user.picture.toString() ||
+              user.picture?.toString() ||
               'https://iptc.org/wp-content/uploads/2018/05/avatar-anonymous-300x300.png'
             }
             referrerPolicy='no-referrer'
