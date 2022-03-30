@@ -46,10 +46,10 @@ const LogInPage = (props) => {
     }
   };
 
-  const handleSubmit = (ev) => {
+  const handleSubmit = async (ev) => {
     ev.preventDefault();
-
-    fetch(`${BASE_URL}/auth/signin`, {
+    setLoading(true);
+    await fetch(`${BASE_URL}/auth/signin`, {
       method: 'POST',
       body: JSON.stringify({
         username: usernameControl.value,
@@ -62,6 +62,7 @@ const LogInPage = (props) => {
       .then((res) => res.json())
       .then((data) => {
         if (!data.token) {
+          setLoading(false);
           throw new Error(data.error);
         }
 
@@ -75,6 +76,7 @@ const LogInPage = (props) => {
         props.history.push('/dashboard');
       })
       .catch((error) => console.error(`${error}`, 'Please try again!', 'error'));
+      setLoading(false);
   };
 
   const loginWithGoogle = async (googleData) => {
