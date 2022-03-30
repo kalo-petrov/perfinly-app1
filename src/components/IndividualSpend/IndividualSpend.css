@@ -1,0 +1,10 @@
+.individual-spend-record {
+  cursor: pointer;
+  border: 0.5px solid #0096FF;
+  border-radius: 5px;
+  margin: 2px;
+}
+
+.individual-spend-record:hover {
+  background-color: rgb(200, 229, 255);
+}

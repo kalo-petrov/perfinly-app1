@@ -1,0 +1,48 @@
+
+.balance-types-container {
+  display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.individual-balance-types {
+  width: 45%;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+@media screen and (min-width: 450px) and (max-width: 800px) {
+  .individual-balance-types {
+    width: 65%;
+
+  }
+}
+@media screen and (min-width: 230px) and (max-width: 449px) {
+  .individual-balance-types {
+    width: 85%;
+
+  }
+}
+@media screen and (min-width: 0px) and (max-width: 229px) {
+  .individual-balance-types {
+    width: 100%;
+
+  }
+}
+
+.individual-balance-type {
+  cursor: pointer;
+  border: 0.5px solid #0096FF;
+  border-radius: 5px;
+  margin: 8px;
+  padding: 3px;
+}
+
+.individual-balance-type:hover {
+  background-color: rgb(200, 229, 255);
+}

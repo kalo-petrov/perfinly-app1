@@ -1,0 +1,38 @@
+
+.dashboard-container {
+	display: block;
+}
+.info-card-container {
+  display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items:stretch;
+	align-content: space-around;
+
+  width: 80%;
+  margin: auto auto;
+}
+
+.total-spend-dashboard {
+	margin-left: 3%;
+	margin-right: 3%;
+	border: 1px solid grey;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-items: stretch;
+	margin-bottom: 10px;
+}
+
+
+@media screen and (min-width: 900px) and (max-width: 1700px) {
+	.total-spend-dashboard-item {
+		width: 47%
+	}
+  }
+  
+.total-spend-dashboard-item{
+	/* height: 90%; */
+}

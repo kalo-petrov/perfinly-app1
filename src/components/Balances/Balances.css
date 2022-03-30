@@ -1,0 +1,32 @@
+.balances-chart-section {
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: stretch;
+  align-content: center;
+}
+
+.balances-container-cell {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: stretch;
+  align-content: space-between;
+  padding: 10px;
+}
+
+.individual-balance {
+  cursor: pointer;
+  border: 1px solid #0096FF;
+  border-radius: 5px;
+  margin: 2px;
+  margin-bottom: 5px;
+  padding: 3px;
+}
+
+.individual-balance:hover {
+  background-color: rgb(200, 229, 255);
+}

@@ -1,0 +1,32 @@
+.feedback-form-container {
+    display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: stretch;
+    align-content: space-between;
+  
+}
+
+@media screen and (min-width: 1000px) and (max-width: 7000px) {
+    .feedback-form-container {
+        margin-left: 25%;
+        margin-right: 25%;
+    }
+  }
+@media screen and (min-width: 500px) and (max-width: 999px) {
+    .feedback-form-container {
+        margin-left: 12%;
+        margin-right: 12%;
+    }
+  }
+@media screen and (min-width: 200px) and (max-width: 499px) {
+    .feedback-form-container {
+        margin-left: 6%;
+        margin-right: 6%;
+    }
+  }
+
+.mb-3 {
+    text-align: left;
+}

@@ -1,0 +1,33 @@
+.input {
+    display: flex;
+    justify-content: center;
+    width: 100% !important;
+    align-items: 'center';
+    margin-bottom: 5px;
+  }
+
+/*   
+.container1 {
+  background-color: white;
+  opacity: 95%;
+  position: fixed;
+  top: 200px;
+  bottom: 500px;
+  width: 500px;
+  height: 430px;
+  padding: 40px;
+  border-radius: 10px;
+} */
+
+/*   
+.container2 {
+  background-color: white;
+  opacity: 95%;
+  position: fixed;
+  top: 70px;
+  bottom: 500px;
+  width: 500px;
+  height: 570px;
+  padding: 20px;
+  border-radius: 10px;
+} */

@@ -1,0 +1,51 @@
+.edit-balance-modal {
+  opacity: 10;
+  position: fixed;
+  border: 1px solid black;
+  height: 380px;
+  background-color: white;
+  top: 0;
+  left: 25%;
+  right: 25%;
+  width: 50%;
+  /* margin-top: 55px; */
+  padding-top: 20px;
+}
+@media screen and (min-width: 100px) and (max-width: 700px) {
+  .edit-balance-modal {
+    
+    left: 15%;
+    right: 15%;
+    width: 70%;
+  }
+}
+
+.edit-balance-fields-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  align-content: space-around;
+}
+
+.editable-balance-item {
+  width: 70%;
+  margin-bottom: 10px;
+}
+
+
+.close-btn {
+  position:absolute;
+  top:5px;
+  right:5px;
+  font-size: x-large;
+  border: 0.3px solid black;
+  border-radius: 40px;
+  padding: 3px;
+  cursor: pointer;
+}
+
+.unverified-input {
+  border-color: red;
+}

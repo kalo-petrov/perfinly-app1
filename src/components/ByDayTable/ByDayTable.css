@@ -1,0 +1,75 @@
+
+.by-day-table-container{
+  overflow: auto;
+}
+
+.by-day-table-options {
+  display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: center;
+	align-content: space-around;
+  margin-bottom: 10px;
+}
+
+.by-day-table-option {
+  margin-right: 10px;
+}
+
+.table-header-cell {
+  border: 0.5px solid black;
+}
+
+table {
+  border-collapse: collapse;
+  border: 0.5px solid black;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+table th {
+  border: 0.5px solid black;
+}
+
+table td {
+  border: 0.5px solid black;
+}
+
+.table-cell-with-spend:hover .button-add-spend-incell {
+  border: 1px solid rgb(0, 0, 0);
+  visibility: visible;
+} 
+
+
+.table-cell-without-spend {
+
+}
+
+.table-cell-without-spend:hover .button-add-spend-incell {
+  border: 1px solid rgb(0, 0, 0);
+  visibility: visible;
+}
+
+.table-cell-without-spend:hover {
+  background-color: rgb(232, 240, 255);
+}
+
+.table-cell-without-spend .button-add-spend-incell {
+  visibility: hidden;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.table-cell-with-spend .button-add-spend-incell {
+  visibility: hidden;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.button-add-spend-incell {}
+
+
+.table-totals {
+  font-weight: 700;
+}

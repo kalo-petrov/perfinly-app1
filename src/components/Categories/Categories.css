@@ -1,0 +1,50 @@
+
+.categories-table-container {
+  margin: auto auto;
+  width: 70%;
+  margin-bottom: 30px;
+}
+
+
+.categories-table {
+  border: 1px solid rgb(0, 0, 0);
+  width: 100%;
+}
+
+.categories-table th {
+  border: 1px solid rgb(0, 0, 0);
+  background-color: #FF5F15;
+}
+
+.categories-table td {
+  border: 1px solid rgb(0, 0, 0);
+}
+
+.categories-row {
+  width: 30%;
+}
+
+.subcategories-cell {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: flex-end;
+	align-content: space-around;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.single-subcategory{
+  border: 0.5px solid #0d2a91;
+  border-radius: 5px;
+  margin: 4px;
+  padding: 2px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+
+.feather-icons-edit-delete {
+  cursor: pointer;
+}

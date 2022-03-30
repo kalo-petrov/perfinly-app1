@@ -1,0 +1,27 @@
+.feedback-container {
+    display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-items: flex-end;
+	align-content: space-around;
+}
+
+.feedback-item {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    width: 400px;
+    height: 200px;
+
+    display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: baseline;
+}
+
+.feedback-subitem {
+    text-align: left;
+    margin-bottom: 5px;
+}

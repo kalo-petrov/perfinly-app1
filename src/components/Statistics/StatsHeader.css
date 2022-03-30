@@ -1,0 +1,64 @@
+.stats-header-section {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: baseline;
+  align-content: space-around;
+  margin-bottom: 10px;
+}
+
+.stats-header-section-item {
+  margin-right: 20px;
+}
+
+.stats-filters-section {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: space-around;
+  margin-bottom: 10px;
+}
+
+.stats-filter-item {
+  margin-right: 20px;
+}
+
+.input-date-picker {
+  width: 200px;
+}
+
+.day-picker-component {
+  position: absolute;
+  z-index: 15;
+  background-color: white;
+  border: 0.5px solid grey;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.day-picker-options {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-items: center;
+  align-content: space-between;
+  margin: 10px;
+}
+
+.Range .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside) {
+  background-color: #0096FF !important;
+  color: #0096FF;
+  background-color: #e1f2ff;
+}
+
+.Range .DayPicker-Day {
+  border-radius: 0 !important;
+}

@@ -1,0 +1,64 @@
+.edit-spend-modal {
+  opacity: 10;
+  position: fixed;
+  border: 1px solid black;
+  min-height: 500px;
+  max-height: 800px;
+  background-color: white;
+  top: 0;
+  left: 15%;
+  right: 15%;
+  width: 70%;
+  /* margin-top: 55px; */
+  padding-top: 20px;
+}
+@media screen and (min-width: 100px) and (max-width: 700px) {
+  .edit-spend-modal {
+    
+    left: 15%;
+    right: 15%;
+    width: 70%;
+  }
+}
+
+.edit-spend-fields-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: baseline;
+  align-content: space-around;
+  margin-left: 20%;
+}
+
+.editable-spend-item {
+  width: 80%;
+  margin-bottom: 10px;
+}
+
+.edit-spend-input-item {
+  width: 80%;
+  margin-bottom: 10px;
+}
+
+.edit-spend-input-checkbox {
+  width: 30%;
+  min-width: 150px;
+  margin-bottom: 10px;
+  text-align: left !important;
+}
+
+.close-btn {
+  position:absolute;
+  top:5px;
+  right:5px;
+  font-size: x-large;
+  border: 0.3px solid black;
+  border-radius: 40px;
+  padding: 3px;
+  cursor: pointer;
+}
+
+.unverified-input {
+  border-color: red;
+}

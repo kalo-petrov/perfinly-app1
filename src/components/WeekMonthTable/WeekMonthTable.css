@@ -1,0 +1,22 @@
+
+.week-month-table-section {
+  margin-left: 10%;
+  margin-right: 10%;
+
+}
+.week-month-table-container {
+	overflow: auto;
+}
+
+.by-week-table-options{
+  display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: flex-end;
+	align-content: stretch;
+}
+
+.by-week-table-option{
+  margin: 10px;
+}
