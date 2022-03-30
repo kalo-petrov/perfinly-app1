@@ -78,10 +78,8 @@ const LogInPage = (props) => {
   };
 
   const loginWithGoogle = async (googleData) => {
-    console.log(googleData)
     if (googleData?.error) {
-      console.log('error')
-      setError(googleData?.error)
+      console.log('Google-signin-error')
       return;
     }
     setLoading(true);
