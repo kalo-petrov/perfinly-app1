@@ -15,9 +15,10 @@
 @media screen and (min-width: 100px) and (max-width: 700px) {
   .edit-spend-modal {
     
-    left: 15%;
-    right: 15%;
-    width: 70%;
+
+    left: 1%;
+    right: 1%;
+    width: 98%;
   }
 }
 
