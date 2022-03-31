@@ -11,11 +11,15 @@
 .stats-header-section-item {
   margin-right: 20px;
 }
-
+@media screen and (min-width: 100px) and (max-width: 560px) {
+  .stats-header-section-item {
+    margin-bottom: 10px;
+  }
+}
 .stats-filters-section {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: flex-start;
   align-items: center;
   align-content: space-around;
@@ -24,6 +28,7 @@
 
 .stats-filter-item {
   margin-right: 20px;
+  margin-bottom: 10px;
 }
 
 .input-date-picker {
