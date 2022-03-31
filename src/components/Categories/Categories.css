@@ -5,6 +5,23 @@
   margin-bottom: 30px;
 }
 
+@media screen and (min-width: 100px) and (max-width: 800px) {
+  .categories-table-container {
+    margin: auto auto;
+    width: 90%;
+    margin-bottom: 30px;
+  }
+  
+}
+@media screen and (min-width: 800px) and (max-width: 1200px) {
+  .categories-table-container {
+    margin: auto auto;
+    width: 80%;
+    margin-bottom: 30px;
+  }
+  
+}
+
 
 .categories-table {
   border: 1px solid rgb(0, 0, 0);

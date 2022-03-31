@@ -18,6 +18,13 @@
   padding: 10px;
 }
 
+.balances-table-container {
+  margin: auto auto;
+  width: 90%;
+  margin-bottom: 30px;
+
+}
+
 .individual-balance {
   cursor: pointer;
   border: 1px solid #0096FF;

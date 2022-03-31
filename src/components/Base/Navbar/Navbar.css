@@ -72,7 +72,7 @@
   margin-right: 15px;
 }
 
-@media screen and (min-width: 100px) and (max-width: 570px) {
+@media screen and (min-width: 100px) and (max-width: 891px) {
   .top-left-navbar-item{
     margin-bottom: 10px;
   }

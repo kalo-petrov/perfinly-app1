@@ -131,7 +131,7 @@ const Balances = () => {
             />
           </div>
 
-          <div className='balances-table container'>
+          <div className='balances-table-container'>
             <table>
               <thead>
                 <tr>
