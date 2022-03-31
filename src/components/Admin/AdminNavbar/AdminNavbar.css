@@ -35,7 +35,7 @@
     align-items: center;
   }
   
-  .top-right-navbar {
+  .top-right-navbar-admin {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;

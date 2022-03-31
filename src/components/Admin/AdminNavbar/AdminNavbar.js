@@ -24,8 +24,8 @@ const AdminNavbar = () => {
 
 
   return (
-    <div className='navbar-container'>
-      <div className='top-left-navbar'>
+    <div className='navbar-container-admin'>
+      <div className='top-left-navbar-admin'>
         <div className='top-left-navbar-item'>
           <Link to='/dashboard'>
             <img id='header-full-logo' src={logo} alt='logo'></img>
@@ -44,7 +44,7 @@ const AdminNavbar = () => {
 
 
       </div>
-      <div className='top-right-navbar'>
+      <div className='top-right-navbar-admin'>
 
 
         <div className='top-right-navbar-item'>

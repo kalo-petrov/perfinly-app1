@@ -38,7 +38,7 @@ const Navbar = () => {
   return (
     <div className='navbar-container'>
       <div className='top-left-navbar'>
-        <div className='top-left-navbar-item'>
+        <div className='top-left-navbar-item-logo'>
           <Link to='/dashboard' onClick={(e) => changeMenu(e)} name='dashboard'>
             <img name='dashboard' id='header-full-logo' src={logo} alt='logo'></img>
           </Link>
