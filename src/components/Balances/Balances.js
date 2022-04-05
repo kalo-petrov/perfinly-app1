@@ -46,7 +46,11 @@ const Balances = () => {
 
             for (const element of data) {
               const amount = mapped.get(element.type_id) || 0;
-              mapped.set(element.type_id, amount + Number(element.amount));
+              mapped.set(element.type_id, amount +
+                currencyProvider.convertToMainCurrency({
+                  amount: element.amount,
+                  currency: element.currency,
+                }).amount);
             }
           }
         })
