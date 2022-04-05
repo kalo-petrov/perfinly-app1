@@ -9,6 +9,8 @@ import Form from 'react-bootstrap/esm/Form';
 import Loader from '../Base/Loader/Loader';
 import currencyList from '../../providers/currencyList.json';
 import AuthContext from '../../context/AuthContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllSpendRecords } from './../../actions/index';
 
 const CreateSpendRecord = ({
   setToggleAddSpend,
@@ -30,7 +32,7 @@ const CreateSpendRecord = ({
   const [description, setDescription] = useState('init');
   const [amount, setAmount] = useState('init');
   const [currency, setCurrency] = useState(useContext(AuthContext).user.currency);
-  const [date, setDate] = useState(selectedDate ||  moment(new Date()).format('yyyy-MM-DD'));
+  const [date, setDate] = useState(selectedDate || moment(new Date()).format('yyyy-MM-DD'));
   const [category, setCategory] = useState(selectedCat || '');
   const [subcategory, setSubcategory] = useState('');
   const [paidWithBalance, setPaidWithBalance] = useState(false);
@@ -38,6 +40,9 @@ const CreateSpendRecord = ({
   const [balances, setBalances] = useState([]);
   const [isReccurring, setIsRecurring] = useState(false);
   const [repeatingPeriod, setRepeatingPeriod] = useState('monthly');
+
+  const dispatch = useDispatch();
+  const allSpendRecords = useSelector((state) => state.spendRecords);
 
   const submitRecord = async (e) => {
     e.preventDefault();
@@ -84,6 +89,11 @@ const CreateSpendRecord = ({
           setError(data.error);
         } else {
           setToggleAddSpend(false);
+          dispatch(getAllSpendRecords([
+            ...allSpendRecords,
+            { ...recordObject, _id: data.newRecord.insertedId },
+          ]))
+
           setThisMonthSpendRecords &&
             setThisMonthSpendRecords((prev) => [
               ...prev,

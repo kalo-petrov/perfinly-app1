@@ -14,19 +14,25 @@ import useComponentVisible from './../../hooks/useComponentVisible';
 import Button from 'react-bootstrap/esm/Button';
 import CreateSpendRecord from './../CreateSpendRecord/CreateSpendRecord';
 import CreateBalance from './../CreateBalance/CreateBalance';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllSpendRecords } from './../../actions/index';
+
 
 function Dashboard() {
   const [error, setError] = useState(null);
   const [spendLastMonth, setSpendLastMonth] = useState([]);
-  const [spendThisMonth, setSpendThisMonth] = useState([]);
   const [topCategoryThisMonth, setTopCategoryThisMonth] = useState({ category: '', amount: 0 });
   const [loading, setLoading] = useState(false);
   const [spendByCategoryThisMonth, setSpendByCategoryThisMonth] = useState([]);
   const [lastSixMonthsSpend, setLastSixMonthsSpend] = useState([]);
   const [balancesByType, setBalancesByType] = useState([]);
   const [balances, setBalances] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   const currency = useContext(AuthContext).user.currency;
+
+  const dispatch = useDispatch()
+  const allSpendRecords = useSelector((state) => state.spendRecords);
 
   const sixMonthsLabels = () => {
     const arr = [];
@@ -64,7 +70,7 @@ function Dashboard() {
           if (data.error) {
             setError(data.error.toString());
           } else {
-            setSpendThisMonth(data);
+            dispatch(getAllSpendRecords(data))
 
             const mapped = new Map();
 
@@ -80,7 +86,6 @@ function Dashboard() {
               );
             }
 
-
             const OBJArr = [];
 
             httpProvider
@@ -89,6 +94,7 @@ function Dashboard() {
                 if (categories.error) {
                   setError(categories.error.toString());
                 } else {
+                  setCategories(categories)
                   for (const [key, value] of mapped) {
                     OBJArr.push({
                       category_id: key,
@@ -131,6 +137,7 @@ function Dashboard() {
                 )
               );
             }
+            console.log(sixMonthData);
             setLastSixMonthsSpend(sixMonthData);
           }
         })
@@ -198,6 +205,34 @@ function Dashboard() {
 
   currencyProvider.convertToMainCurrency({ amount: 10, currency: 'BGN' });
 
+  useEffect(() => {
+    const mapped = new Map();
+    console.log('changed');
+
+    for (const element of allSpendRecords) {
+      const amount = mapped.get(element.category_id) || 0;
+      mapped.set(
+        element.category_id,
+        amount +
+          currencyProvider.convertToMainCurrency({
+            amount: element.amount,
+            currency: element.currency,
+          }).amount
+      );
+    }
+
+    const OBJArr = [];
+    for (const [key, value] of mapped) {
+      OBJArr.push({
+        category_id: key,
+        amount: value,
+        name: categories.find((c) => c._id === key)?.name,
+      });
+    }
+
+    setSpendByCategoryThisMonth(OBJArr.sort((a, b) => b.amount - a.amount));
+  }, [toggleAddSpend, allSpendRecords, categories])
+
   return (
     <div className='dashboard-container'>
       <h3>Dashboard</h3>
@@ -228,7 +263,7 @@ function Dashboard() {
                   height={'345px'}
                   width={'325px'}
                   title={`Spend By Category This Month: Total:  ${currency} ${currencyProvider.sumToMainCurrency(
-                    spendThisMonth
+                    allSpendRecords
                   )}`}
                 />
               ) : (
@@ -288,7 +323,7 @@ function Dashboard() {
             <InfoCard
               title={'TOTAL SPEND THIS MONTH'}
               currency={currency}
-              amount={currencyProvider.sumToMainCurrency(spendThisMonth)}
+              amount={currencyProvider.sumToMainCurrency(allSpendRecords)}
             />
             <InfoCard
               title={`TOP SPEND CATEGORY THIS MONTH: ${
