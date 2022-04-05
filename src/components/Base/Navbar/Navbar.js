@@ -134,17 +134,32 @@ const Navbar = () => {
           />
           {isComponentVisible && (
             <div className='user-info-container' ref={ref}>
-              <div className='user-info-item'>{user.username}</div>
-              <div className='user-info-item'>{user.email}</div>
-              <div className='user-info-item'>{user.first_name}</div>
-              <div className='user-info-item'>{user.last_name}</div>
-              <div className='user-info-item-action' style={{ cursor: 'pointer' }}>
+              <div className='user-info-item-action'>
+                <Link
+                  to='/edit-profile'
+                  style={{ textDecoration: 'none', color: 'black' }}
+                  onClick={() => setIsComponentVisible(false)}
+                >
+                  {user.username}
+                </Link>
+              </div>
+              <div className='user-info-item-action'>
                 <Link
                   to='/edit-profile'
                   style={{ textDecoration: 'none', color: 'black' }}
                   onClick={() => setIsComponentVisible(false)}
                 >
                   Edit Profile
+                </Link>
+              </div>
+              <div  className='user-info-item-action' >
+                <Link
+                  to='/feedback'
+                  name='feedback'
+                  style={{ textDecoration: 'none', color: 'black' }}
+                  onClick={() => setIsComponentVisible(false)}
+                >
+                  Give us Feedback
                 </Link>
               </div>
               <div
@@ -157,21 +172,7 @@ const Navbar = () => {
             </div>
           )}
         </div>
-        <div className='top-right-navbar-item' title='Give Us Feedback'>
-          <Link
-            to='/feedback'
-            name='feedback'
-            className={
-              selectedMenu === 'feedback'
-                ? 'text-left-navbar-text-selected'
-                : 'text-left-navbar-text'
-            }
-            onClick={(e) => changeMenu(e)}
-            style={{ fontSize: '25px', paddingBottom: '7px' }}
-          >
-            <FeatherIcon icon='message-circle' color='black' size='40px' id='feedback' />
-          </Link>
-        </div>
+        <div className='top-right-navbar-item' title='Give Us Feedback'></div>
       </div>
     </div>
   );

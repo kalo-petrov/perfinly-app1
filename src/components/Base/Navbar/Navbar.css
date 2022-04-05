@@ -125,6 +125,7 @@
   border-bottom: 0.5px solid grey;
   padding-bottom: 10px;
   padding-left: 4px;
+  cursor: pointer;
 }
 .user-info-item-action:hover {
   border-bottom: 0.5px solid grey;
