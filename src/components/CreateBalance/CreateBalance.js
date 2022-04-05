@@ -15,6 +15,7 @@ const CreateBalance = ({ setToggleAddBalance, setBalances }) => {
   const [error, setError] = useState(null);
   const [verificationMessage, setVerificationMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loading2, setLoading2] = useState(false);
   const [description, setDescription] = useState('init');
   const [amount, setAmount] = useState('init');
   const [currency, setCurrency] = useState(user.currency);
@@ -57,6 +58,7 @@ const CreateBalance = ({ setToggleAddBalance, setBalances }) => {
 
   useEffect(() => {
     async function fetchData() {
+      setLoading2(true)
       await httpProvider
         .get(`${BASE_URL}/balance-types`)
         .then((data) => {
@@ -67,6 +69,7 @@ const CreateBalance = ({ setToggleAddBalance, setBalances }) => {
           }
         })
         .catch((error) => console.log(error) + setError(error.toString()));
+        setLoading2(false)
     }
     fetchData();
 
@@ -119,9 +122,10 @@ const CreateBalance = ({ setToggleAddBalance, setBalances }) => {
             name='type'
             value={type}
             onChange={(e) => setType(e.target.value)}
+            disabled={loading2}
           >
             <option key={0.1} value='none' disabled hidden>
-              Select Type
+            {loading2 ? 'Loading...' : 'Select Type'}
             </option>
             {types?.map((t) => {
               return (
