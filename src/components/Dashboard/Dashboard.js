@@ -9,7 +9,7 @@ import PieChart from '../Charts/PieChart/PieChart';
 import LineChart from '../Charts/LineChart/LineChart';
 import Loader from '../Base/Loader/Loader';
 import currencyProvider from '../../providers/CurrencyProvider';
-import AuthContext from '../context/AuthContext';
+import AuthContext from '../../context/AuthContext';
 import useComponentVisible from './../../hooks/useComponentVisible';
 import Button from 'react-bootstrap/esm/Button';
 import CreateSpendRecord from './../CreateSpendRecord/CreateSpendRecord';

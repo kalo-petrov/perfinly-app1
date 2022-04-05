@@ -4,7 +4,7 @@ import './App.css';
 import MainStats from './components/Statistics/MainStats';
 import Navbar from './components/Base/Navbar/Navbar';
 import Categories from './components/Categories/Categories';
-import AuthContext, { extractUser, getToken, getCurrencyRates } from './components/context/AuthContext';
+import AuthContext, { extractUser, getToken, getCurrencyRates } from './context/AuthContext';
 import { useEffect, useState, useContext } from 'react';
 import LogInPage from './components/Auth/LogInPage';
 import RegisterPage from './components/Auth/RegisterPage';

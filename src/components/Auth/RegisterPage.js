@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
-import AuthContext, { extractUser } from '../context/AuthContext';
+import AuthContext, { extractUser } from '../../context/AuthContext';
 import Form from 'react-bootstrap/Form';
 import './LogInPage.css';
 import { BASE_URL } from '../../common/constants';

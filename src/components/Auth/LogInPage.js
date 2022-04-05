@@ -1,11 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
-import AuthContext, { extractUser } from '../context/AuthContext';
-import CurrencyContext from '../context/CurrencyContext';
+import AuthContext, { extractUser } from '../../context/AuthContext';
 import Form from 'react-bootstrap/Form';
 import './LogInPage.css';
 import { BASE_URL } from '../../common/constants';
-import * as SVGLoaders from 'svg-loaders-react';
 import GoogleLogin from 'react-google-login';
 import Error from './../Base/Error/Error';
 import Loader from './../Base/Loader/Loader';

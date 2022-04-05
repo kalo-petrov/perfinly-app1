@@ -1,6 +1,6 @@
 import React, {useContext, useState} from 'react'
 import './AdminNavbar.css'
-import AuthContext from '../../context/AuthContext';
+import AuthContext from '../../../context/AuthContext';
 import httpProvider from './../../../providers/httpProvider';
 import { Link, useHistory } from 'react-router-dom';
 import { BASE_URL } from './../../../common/constants';

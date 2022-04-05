@@ -5,7 +5,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import Button from 'react-bootstrap/esm/Button';
 import { useDispatch } from 'react-redux';
 import { getAllSpendRecords } from '../../actions';
-import AuthContext from '../context/AuthContext';
+import AuthContext from '../../context/AuthContext';
 import currencyProvider from '../../providers/CurrencyProvider';
 
 const ByDayByCategoryTable = ({

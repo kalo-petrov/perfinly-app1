@@ -3,7 +3,7 @@ import './CreateBalance.css';
 import httpProvider from '../../providers/httpProvider';
 import { BASE_URL } from '../../common/constants';
 import Error from '../Base/Error/Error';
-import AuthContext from '../context/AuthContext';
+import AuthContext from '../../context/AuthContext';
 import Button from 'react-bootstrap/esm/Button';
 import Form from 'react-bootstrap/esm/Form';
 import currencyList from '../../providers/currencyList.json';

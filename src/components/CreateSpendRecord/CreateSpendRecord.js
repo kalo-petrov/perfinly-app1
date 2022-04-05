@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/esm/Button';
 import Form from 'react-bootstrap/esm/Form';
 import Loader from '../Base/Loader/Loader';
 import currencyList from '../../providers/currencyList.json';
-import AuthContext from '../context/AuthContext';
+import AuthContext from '../../context/AuthContext';
 
 const CreateSpendRecord = ({
   setToggleAddSpend,

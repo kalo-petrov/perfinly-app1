@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/esm/Button';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllSpendRecords } from '../../actions';
 import currencyProvider from '../../providers/CurrencyProvider';
-import AuthContext from '../context/AuthContext';
+import AuthContext from '../../context/AuthContext';
 
 const WeekMonthTable = ({
   confirmedFromDate,

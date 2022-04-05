@@ -10,7 +10,7 @@ import Loader from './../Base/Loader/Loader';
 import PieChart from './../Charts/PieChart/PieChart';
 import useComponentVisible from './../../hooks/useComponentVisible';
 import currencyProvider from '../../providers/CurrencyProvider';
-import AuthContext from '../context/AuthContext';
+import AuthContext from '../../context/AuthContext';
 
 const Balances = () => {
   const [error, setError] = useState(null);

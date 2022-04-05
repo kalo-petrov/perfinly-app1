@@ -4,7 +4,7 @@ import httpProvider from './../../providers/httpProvider';
 import { BASE_URL } from './../../common/constants';
 import { Form } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
-import AuthContext, { extractUser } from '../context/AuthContext';
+import AuthContext, { extractUser } from '../../context/AuthContext';
 import Loader from './../Base/Loader/Loader';
 import currencyList from './../../providers/currencyList.json'
 

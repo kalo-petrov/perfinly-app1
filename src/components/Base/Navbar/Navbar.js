@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { BASE_URL } from '../../../common/constants';
 import httpProvider from '../../../providers/httpProvider';
-import AuthContext from '../../context/AuthContext';
+import AuthContext from '../../../context/AuthContext';
 import './Navbar.css';
 import logo from '../../../assets/FullNameLogo-vec.png';
 import Button from 'react-bootstrap/esm/Button';
