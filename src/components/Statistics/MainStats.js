@@ -37,6 +37,7 @@ const MainStats = () => {
 
   const [thisMonthSpendRecords, setThisMonthSpendRecords] = useState([]);
   const [refreshed, setRefreshed] = useState(false);
+  const dispatch = useDispatch();
 
   const {
     ref: ref2,
@@ -82,7 +83,8 @@ const MainStats = () => {
           if (data.error) {
             setError(data.error.toString());
           } else {
-            setThisMonthSpendRecords(data);
+            dispatch(getAllSpendRecords(data))
+            setThisMonthSpendRecords(data)
           }
         })
         .catch((error) => setError(error.toString()));
@@ -134,11 +136,6 @@ const MainStats = () => {
     }
   };
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getAllSpendRecords(thisMonthSpendRecords));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const allSpendRecords = useSelector((state) => state.spendRecords);
 
@@ -199,7 +196,6 @@ const MainStats = () => {
             setToggleAddSpend={setToggleAddSpend}
             selectedDate={selectedDate}
             selectedCat={selectedCategory}
-            setThisMonthSpendRecords={setThisMonthSpendRecords}
             categories={categories}
             subcategories={subcategories}
           />
@@ -212,7 +208,6 @@ const MainStats = () => {
             subcategories={subcategories}
             setToggleEdit={setToggleEdit}
             selectedSpend={selectedSpend}
-            setThisMonthSpendRecords={setThisMonthSpendRecords}
           />
         </div>
       )}
@@ -234,7 +229,6 @@ const MainStats = () => {
             subcategories={subcategories}
             confirmedFromDate={confirmedFromDate}
             confirmedToDate={confirmedToDate}
-            thisMonthSpendRecords={thisMonthSpendRecords}
             toggleEdit={toggleEdit}
             setToggleEdit={setToggleEdit}
             setSelectedSpend={setSelectedSpend}
@@ -256,11 +250,11 @@ const MainStats = () => {
         )) ||
         (history.location.pathname.includes('all-expenses') && (
           <AllExpenses
-            thisMonthSpendRecords={thisMonthSpendRecords}
             categories={categories}
             subcategories={subcategories}
             setToggleEdit={setToggleEdit}
             setSelectedSpend={setSelectedSpend}
+            thisMonthSpendRecords={thisMonthSpendRecords}
             confirmedFromDate={confirmedFromDate}
             confirmedToDate={confirmedToDate}
           />

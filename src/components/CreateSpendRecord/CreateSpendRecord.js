@@ -16,7 +16,6 @@ const CreateSpendRecord = ({
   setToggleAddSpend,
   selectedDate,
   selectedCat,
-  setThisMonthSpendRecords,
   categories,
   subcategories,
 }) => {
@@ -94,11 +93,6 @@ const CreateSpendRecord = ({
             { ...recordObject, _id: data.newRecord.insertedId },
           ]))
 
-          setThisMonthSpendRecords &&
-            setThisMonthSpendRecords((prev) => [
-              ...prev,
-              { ...recordObject, _id: data.newRecord.insertedId },
-            ]);
         }
       })
       .catch((e) => console.error(e));

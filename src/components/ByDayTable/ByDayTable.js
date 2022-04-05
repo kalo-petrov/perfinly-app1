@@ -1,10 +1,9 @@
 import './ByDayTable.css';
 import IndividualSpend from '../IndividualSpend/IndividualSpend';
 import dateProvider from '../../providers/dateProvider';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState,  useContext } from 'react';
 import Button from 'react-bootstrap/esm/Button';
-import { useDispatch } from 'react-redux';
-import { getAllSpendRecords } from '../../actions';
+import {  useSelector } from 'react-redux';
 import AuthContext from '../../context/AuthContext';
 import currencyProvider from '../../providers/CurrencyProvider';
 
@@ -13,7 +12,6 @@ const ByDayByCategoryTable = ({
   subcategories,
   confirmedFromDate,
   confirmedToDate,
-  thisMonthSpendRecords,
   toggleEdit,
   setToggleEdit,
   setSelectedSpend,
@@ -23,10 +21,8 @@ const ByDayByCategoryTable = ({
 }) => {
   const [catOrSubCat, setCatOrSubcat] = useState('cat');
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getAllSpendRecords(thisMonthSpendRecords));
-  }, [dispatch, thisMonthSpendRecords]);
+  const allSpendRecords = useSelector((state) => state.spendRecords);
+
 
   const currency = useContext(AuthContext).user.currency;
 
@@ -69,13 +65,13 @@ const ByDayByCategoryTable = ({
                 <th> {d}</th>
                 <th>
                   {currencyProvider.sumToMainCurrency(
-                    thisMonthSpendRecords.filter(
+                    allSpendRecords.filter(
                       (sp) => new Date(sp.date).getDate() === new Date(d).getDate()
                     )
                   )}
                 </th>
                 {(catOrSubCat === 'cat' ? categories : subcategories)?.map((c) => {
-                  const spendsForDayAndCategory = thisMonthSpendRecords.filter((r) => {
+                  const spendsForDayAndCategory = allSpendRecords.filter((r) => {
                     return (
                       (catOrSubCat === 'cat' ? r.category_id : r.subcategory_id) === c._id &&
                       new Date(r.date).getDate() === new Date(d).getDate()
@@ -121,13 +117,13 @@ const ByDayByCategoryTable = ({
           <tr>
             <th> Total On Page</th>
             <th>
-              {currency} {currencyProvider.sumToMainCurrency(thisMonthSpendRecords)}
+              {currency} {currencyProvider.sumToMainCurrency(allSpendRecords)}
             </th>
             {(catOrSubCat === 'cat' ? categories : subcategories)?.map((c) => {
               return (
                 <td key={c._id}>
                   {currencyProvider.sumToMainCurrency(
-                    thisMonthSpendRecords.filter(
+                    allSpendRecords.filter(
                       (sp) => (catOrSubCat === 'cat' ? sp.category_id : sp.subcategory_id) === c._id
                     )
                   ) || '0'}

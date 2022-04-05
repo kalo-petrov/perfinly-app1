@@ -137,7 +137,6 @@ function Dashboard() {
                 )
               );
             }
-            console.log(sixMonthData);
             setLastSixMonthsSpend(sixMonthData);
           }
         })
@@ -207,7 +206,6 @@ function Dashboard() {
 
   useEffect(() => {
     const mapped = new Map();
-    console.log('changed');
 
     for (const element of allSpendRecords) {
       const amount = mapped.get(element.category_id) || 0;
