@@ -102,24 +102,26 @@ const MainStats = () => {
     // };
   }, [confirmedFromDate, confirmedToDate, refreshed]);
 
-  const applyDates = () => {
+  const applyDates = async () => {
     setLoading(true);
     const from = moment(fromDate).format('yyyy-MM-DD');
     const to = moment(toDate).format('yyyy-MM-DD');
     setConfirmedFromDate(from);
     setConfirmedToDate(to);
 
-    httpProvider
+    await httpProvider
       .get(`${BASE_URL}/spending?start_date=${from}&end_date=${to}`)
       .then((data) => {
         if (data.error) {
           setError(data.error.toString());
         } else {
           setThisMonthSpendRecords(data);
+          dispatch(getAllSpendRecords(data))
           setLoading(false);
         }
       })
       .catch((error) => setError(error.toString()));
+      
   };
 
   const labelArray = () => {
@@ -230,6 +232,7 @@ const MainStats = () => {
             confirmedFromDate={confirmedFromDate}
             confirmedToDate={confirmedToDate}
             toggleEdit={toggleEdit}
+            thisMonthSpendRecords={thisMonthSpendRecords}
             setToggleEdit={setToggleEdit}
             setSelectedSpend={setSelectedSpend}
             setSelectedDate={setSelectedDate}

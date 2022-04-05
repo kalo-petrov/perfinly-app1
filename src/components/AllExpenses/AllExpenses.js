@@ -211,7 +211,7 @@ const AllExpenses = ({
                   <td>{record.description}</td>
                   <td>{record.amount}</td>
                   <td>{record.currency}</td>
-                  <td>{moment(record.date).format('YYYY-MM-DD')}</td>
+                  <td>{(record.date).slice(0,10)}</td>
                   <td>{categories.find((c) => c._id === record.category_id)?.name}</td>
                   <td>{subcategories.find((sc) => sc._id === record.subcategory_id)?.name}</td>
                   <td>{balances.find((b) => b._id === record.balance_id)?.description}</td>
