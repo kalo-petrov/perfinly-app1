@@ -36,3 +36,7 @@
 .total-spend-dashboard-item{
 	/* height: 90%; */
 }
+
+.no-info-text {
+	font-size: x-large;
+}

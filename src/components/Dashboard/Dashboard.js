@@ -10,6 +10,10 @@ import LineChart from '../Charts/LineChart/LineChart';
 import Loader from '../Base/Loader/Loader';
 import currencyProvider from '../../providers/CurrencyProvider';
 import AuthContext from '../context/AuthContext';
+import useComponentVisible from './../../hooks/useComponentVisible';
+import Button from 'react-bootstrap/esm/Button';
+import CreateSpendRecord from './../CreateSpendRecord/CreateSpendRecord';
+import CreateBalance from './../CreateBalance/CreateBalance';
 
 function Dashboard() {
   const [error, setError] = useState(null);
@@ -117,7 +121,6 @@ function Dashboard() {
                   )
                 )
               );
-
             }
             setLastSixMonthsSpend(sixMonthData);
           }
@@ -168,13 +171,34 @@ function Dashboard() {
     fetchData();
   }, []);
 
+  const {
+    ref,
+    isComponentVisible: toggleAddSpend,
+    setIsComponentVisible: setToggleAddSpend,
+  } = useComponentVisible(false);
+
+  const {
+    ref: ref2,
+    isComponentVisible: toggleAddBalance,
+    setIsComponentVisible: setToggleAddBalance,
+  } = useComponentVisible(false);
+
   return (
     <div className='dashboard-container'>
       <h3>Dashboard</h3>
       {error && <Error error={error} setError={setError} />}
       <br />
       <br />
-
+      {toggleAddSpend && (
+        <div ref={ref}>
+          <CreateSpendRecord setToggleAddSpend={setToggleAddSpend} />
+        </div>
+      )}
+      {toggleAddBalance && (
+        <div ref={ref2}>
+          <CreateBalance setToggleAddBalance={setToggleAddBalance} setBalances={setBalances} />
+        </div>
+      )}
       {loading ? (
         <Loader />
       ) : (
@@ -182,15 +206,25 @@ function Dashboard() {
           <div className='total-spend-dashboard'>
             {' '}
             <div className='total-spend-dashboard-item'>
-              <PieChart
-                data={spendByCategoryThisMonth.map((s) => s.amount)}
-                labels={spendByCategoryThisMonth.map((s) => s.name)}
-                height={'345px'}
-                width={'325px'}
-                title={`Spend By Category This Month: Total:  ${currency} ${currencyProvider.sumToMainCurrency(
-                  spendThisMonth
-                )}`}
-              />
+              {spendByCategoryThisMonth.length > 0 ? (
+                <PieChart
+                  data={spendByCategoryThisMonth.map((s) => s.amount)}
+                  labels={spendByCategoryThisMonth.map((s) => s.name)}
+                  height={'345px'}
+                  width={'325px'}
+                  title={`Spend By Category This Month: Total:  ${currency} ${currencyProvider.sumToMainCurrency(
+                    spendThisMonth
+                  )}`}
+                />
+              ) : (
+                <div className='no-info-text'>
+                  NO SPEND RECORDS THIS MONTH.
+                  <br />
+                  <Button variant='primary' onClick={() => setToggleAddSpend((prev) => !prev)}>
+                    Add You First Spend
+                  </Button>
+                </div>
+              )}
             </div>
             <div className='total-spend-dashboard-item'>
               <LineChart
@@ -206,15 +240,27 @@ function Dashboard() {
           <div className='total-spend-dashboard'>
             {' '}
             <div className='total-spend-dashboard-item'>
-              <PieChart
-                data={balancesByType.map((b) => b.amount)}
-                labels={balancesByType.map((b) => b.name)}
-                height={'345px'}
-                width={'325px'}
-                title={`Current Balances Total: ${currency} ${currencyProvider.sumToMainCurrency(
-                  balances
-                )}`}
-              />
+              {balancesByType.length > 0 ? (
+                <PieChart
+                  data={balancesByType.map((b) => b.amount)}
+                  labels={balancesByType.map((b) => b.name)}
+                  height={'345px'}
+                  width={'325px'}
+                  title={`Current Balances Total: ${currency} ${currencyProvider.sumToMainCurrency(
+                    balances
+                  )}`}
+                />
+              ) : (
+                <div className='no-info-text'>
+                  NO BALANCES ADDED.
+                  <br />
+                  <Button variant='primary' onClick={() => setToggleAddBalance((prev) => !prev)}>
+                    Add You First Balance
+                  </Button>
+                  <br/>
+                  <br/>
+                </div>
+              )}
             </div>
           </div>
 
