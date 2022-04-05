@@ -70,24 +70,33 @@ function Dashboard() {
 
             for (const element of data) {
               const amount = mapped.get(element.category_id) || 0;
-              mapped.set(element.category_id, amount + Number(element.amount));
+              mapped.set(
+                element.category_id,
+                amount +
+                  currencyProvider.convertToMainCurrency({
+                    amount: element.amount,
+                    currency: element.currency,
+                  }).amount
+              );
             }
+
 
             const OBJArr = [];
 
             httpProvider
               .get(`${BASE_URL}/spend-categories`)
-              .then((data1) => {
-                if (data1.error) {
-                  setError(data1.error.toString());
+              .then((categories) => {
+                if (categories.error) {
+                  setError(categories.error.toString());
                 } else {
                   for (const [key, value] of mapped) {
                     OBJArr.push({
                       category_id: key,
                       amount: value,
-                      name: data1.find((c) => c._id === key)?.name,
+                      name: categories.find((c) => c._id === key)?.name,
                     });
                   }
+
 
                   setSpendByCategoryThisMonth(OBJArr);
                   setTopCategoryThisMonth(OBJArr.sort((a, b) => b.amount - a.amount)[0]);
@@ -138,14 +147,18 @@ function Dashboard() {
 
             for (const element of data) {
               const amount = mapped.get(element.type_id) || 0;
-              mapped.set(element.type_id, amount + Number(element.amount));
+              mapped.set(element.type_id,  amount +
+                currencyProvider.convertToMainCurrency({
+                  amount: element.amount,
+                  currency: element.currency,
+                }).amount);
             }
 
             httpProvider
               .get(`${BASE_URL}/balance-types`)
-              .then((data1) => {
-                if (data1.error) {
-                  setError(data1.error.toString());
+              .then((balance_types) => {
+                if (balance_types.error) {
+                  setError(balance_types.error.toString());
                 } else {
                   setBalancesByType([]);
                   for (const [key, value] of mapped) {
@@ -154,7 +167,7 @@ function Dashboard() {
                       {
                         type_id: key,
                         amount: value,
-                        name: data1.find((type) => type._id === key)?.name,
+                        name: balance_types.find((type) => type._id === key)?.name,
                       },
                     ]);
                   }
@@ -183,6 +196,8 @@ function Dashboard() {
     setIsComponentVisible: setToggleAddBalance,
   } = useComponentVisible(false);
 
+  currencyProvider.convertToMainCurrency({ amount: 10, currency: 'BGN' });
+
   return (
     <div className='dashboard-container'>
       <h3>Dashboard</h3>
@@ -209,7 +224,7 @@ function Dashboard() {
               {spendByCategoryThisMonth.length > 0 ? (
                 <PieChart
                   data={spendByCategoryThisMonth.map((s) => s.amount)}
-                  labels={spendByCategoryThisMonth.map((s) => s.name)}
+                  labels={spendByCategoryThisMonth.map((s) => s.name )}
                   height={'345px'}
                   width={'325px'}
                   title={`Spend By Category This Month: Total:  ${currency} ${currencyProvider.sumToMainCurrency(
@@ -257,8 +272,8 @@ function Dashboard() {
                   <Button variant='primary' onClick={() => setToggleAddBalance((prev) => !prev)}>
                     Add You First Balance
                   </Button>
-                  <br/>
-                  <br/>
+                  <br />
+                  <br />
                 </div>
               )}
             </div>
@@ -280,7 +295,7 @@ function Dashboard() {
                 topCategoryThisMonth?.name?.toUpperCase() || `None`
               }`}
               currency={currency}
-              amount={topCategoryThisMonth?.amount.toFixed(2)}
+              amount={topCategoryThisMonth?.amount?.toFixed(2)}
             />
           </div>
         </div>
