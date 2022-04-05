@@ -24,6 +24,12 @@ const anyPeriodWeekly = (fromDate, toDate) => {
   const daysCount = (moment(endDate) - moment(startDate)) / 86400000 + 1;
   const weeksArray = [];
 
+  if (daysCount === 1) {
+    const weekStart = moment(fromDate).startOf('isoWeek').format('yyyy-MM-DD');
+    const weekEnd = moment(fromDate).endOf('isoWeek').format('yyyy-MM-DD');
+    
+    weeksArray.push({ weekStart, weekEnd });
+  }
   for (let i = 1; i < daysCount; i += 7) {
     const weekStart = moment(fromDate).add(i, 'days').startOf('isoWeek').format('yyyy-MM-DD');
     const weekEnd = moment(fromDate).add(i, 'days').endOf('isoWeek').format('yyyy-MM-DD');
