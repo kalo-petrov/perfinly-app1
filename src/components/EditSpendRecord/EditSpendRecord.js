@@ -9,6 +9,8 @@ import CloseButtoon from 'react-bootstrap/esm/CloseButton';
 import Form from 'react-bootstrap/esm/Form';
 import Loader from './../Base/Loader/Loader';
 import currencyList from '../../providers/currencyList.json';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllSpendRecords } from './../../actions/index';
 
 const EditSpendRecord = ({
   selectedSpend,
@@ -34,6 +36,9 @@ const EditSpendRecord = ({
   const [paidWithBalance, setPaidWithBalance] = useState(selectedSpend.balance_id ? true : false);
   const [isReccurring, setIsRecurring] = useState(selectedSpend.recurrence ? true : false);
   const [repeatingPeriod, setRepeatingPeriod] = useState(selectedSpend.recurrence);
+
+  const dispatch = useDispatch();
+  const allSpendRecords = useSelector((state) => state.spendRecords);
 
   useEffect(() => {
     async function fetchData() {
@@ -101,7 +106,6 @@ const EditSpendRecord = ({
         if (data.error) {
           setError(data.error);
         } else {
-          setToggleEdit(false);
           setThisMonthSpendRecords((prev) =>
             prev.map((sr) => {
               if (sr._id === selectedSpend._id) {
@@ -112,6 +116,18 @@ const EditSpendRecord = ({
             })
           );
         }
+        dispatch(
+          getAllSpendRecords(
+            allSpendRecords.map((sr) => {
+              if (sr._id === selectedSpend._id) {
+                return { ...sr, ...recordObject };
+              } else {
+                return sr;
+              }
+            })
+          )
+        );
+        setToggleEdit(false);
       })
       .catch((e) => console.error(e));
 
@@ -131,8 +147,11 @@ const EditSpendRecord = ({
           if (data.error) {
             setError(data.error);
           } else {
-            setToggleEdit(false);
             setThisMonthSpendRecords((prev) => prev.filter((r) => r._id !== selectedSpend._id));
+            dispatch(
+              getAllSpendRecords(allSpendRecords.filter((r) => r._id !== selectedSpend._id))
+            );
+            setToggleEdit(false);
           }
         })
         .catch((error) => setError(error.toString()));

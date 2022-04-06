@@ -210,6 +210,7 @@ const MainStats = () => {
             subcategories={subcategories}
             setToggleEdit={setToggleEdit}
             selectedSpend={selectedSpend}
+            setThisMonthSpendRecords={setThisMonthSpendRecords}
           />
         </div>
       )}
