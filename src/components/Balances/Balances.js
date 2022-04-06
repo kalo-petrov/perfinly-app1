@@ -99,6 +99,7 @@ const Balances = () => {
             setToggleEditBalance={setToggleEditBalance}
             setBalances={setBalances}
             selectedBalance={selectedBalance}
+            types={types}
           />
         </div>
       )}

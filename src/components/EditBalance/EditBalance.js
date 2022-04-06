@@ -13,6 +13,7 @@ const EditBalance = ({
   selectedBalance,
   setBalances,
   setToggleEditBalance,
+  types,
 }) => {
 
   const [error, setError] = useState(null);
@@ -24,29 +25,6 @@ const EditBalance = ({
   const [currency, setCurrency] = useState(selectedBalance.currency);
   const [type, setType] = useState(selectedBalance.type_id);
 
-  const [types, setTypes] = useState([]);
-
-  useEffect(() => {
-    async function fetchData() {
-      await httpProvider
-        .get(`${BASE_URL}/balance-types`)
-        .then((data) => {
-          if (data.error) {
-            setError(data.error.toString());
-          } else {
-            setTypes(data);
-          }
-        })
-        .catch((error) => setError(error.toString()));
-    }
-
-    fetchData();
-
-    return () => {
-      setError('');
-      setTypes('');
-    };
-  }, []);
 
   const submitEditedBalance = async (e) => {
     e.preventDefault();
@@ -59,8 +37,17 @@ const EditBalance = ({
     };
 
     for (const [key, value] of Object.entries(balanceObject)) {
-      if (!value) {
+      if (key === 'description' && (!value || value === 'init')) {
         setVerificationMessage(`${key} `);
+        setLoading(false);
+        return;
+      } else if (key === 'amount' && (!value || value === 'init' || value <= 0)) {
+        setVerificationMessage(`${key} and should be number larger than 0`);
+        setLoading(false);
+        return;
+      } else if (key === 'type_id' && (!value || value === 'none')) {
+        setVerificationMessage(`Please select a type. `);
+        setLoading(false);
         return;
       } else {
         setVerificationMessage('');
@@ -119,6 +106,7 @@ const EditBalance = ({
       <CloseButtoon className='close-btn' onClick={() => setToggleEditBalance(false)} />
       <h4>Edit balance Record</h4>
       <br />
+      {verificationMessage && <p>{verificationMessage} required</p>}
       <div className='edit-balance-fields-container'>
         <div className='editable-balance-item'>
           <Form.Group>
@@ -155,6 +143,7 @@ const EditBalance = ({
           <Form.Select
             aria-label='type'
             name='type'
+            className={verificationMessage.includes('type') ? 'unverified-input' : 'ok'}
             onChange={(e) => setType(e.target.value)}
             value={type}
           >

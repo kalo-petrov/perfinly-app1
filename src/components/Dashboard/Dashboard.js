@@ -133,7 +133,6 @@ function Dashboard() {
           } else {
             setBalances(data);
             const mapped = new Map();
-            console.log('setting balances');
 
             for (const element of data) {
               const amount = mapped.get(element.type_id) || 0;
@@ -154,7 +153,6 @@ function Dashboard() {
                   if (balance_types.error) {
                     setError(balance_types.error.toString());
                   } else {
-                    console.log('setting balance types');
                     setBalancesByType([]);
                     for (const [key, value] of mapped) {
                       setBalancesByType((prev) => [

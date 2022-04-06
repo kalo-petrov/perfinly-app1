@@ -32,8 +32,16 @@ const CreateBalance = ({ setToggleAddBalance, setBalances }) => {
     };
 
     for (const [key, value] of Object.entries(balanceObject)) {
-      if (!value || value === 'init') {
+      if (key === 'description' && (!value || value === 'init')) {
         setVerificationMessage(`${key} `);
+        setLoading(false);
+        return;
+      } else if (key === 'amount' && (!value || value === 'init' || value <= 0)) {
+        setVerificationMessage(`${key} and should be number larger than 0`);
+        setLoading(false);
+        return;
+      } else if (key === 'type_id' && (!value || value === 'none')) {
+        setVerificationMessage(`Please select a type. `);
         setLoading(false);
         return;
       } else {
@@ -120,6 +128,7 @@ const CreateBalance = ({ setToggleAddBalance, setBalances }) => {
           <Form.Select
             aria-label='type'
             name='type'
+            className={verificationMessage.includes('type') ? 'unverified-input' : 'ok'}
             value={type}
             onChange={(e) => setType(e.target.value)}
             disabled={loading2}
