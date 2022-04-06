@@ -8,10 +8,16 @@ import Button from 'react-bootstrap/esm/Button';
 import Form from 'react-bootstrap/esm/Form';
 import currencyList from '../../providers/currencyList.json';
 import Loader from './../Base/Loader/Loader';
+import currencyProvider from './../../providers/CurrencyProvider';
 
-const CreateBalance = ({ setToggleAddBalance, setBalances }) => {
+const CreateBalance = ({
+  setToggleAddBalance,
+  setBalances,
+  balances,
+  types,
+  setBalancesByType,
+}) => {
   const { user } = useContext(AuthContext);
-  const [types, setTypes] = useState([]);
   const [error, setError] = useState(null);
   const [verificationMessage, setVerificationMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -56,7 +62,34 @@ const CreateBalance = ({ setToggleAddBalance, setBalances }) => {
         if (data.error) {
           setError(data.error);
         } else {
-          setBalances((prev) => [...prev, balanceObject]);
+          setBalances((prev) => [...prev, balanceObject].sort((a, b) => b.amount - a.amount));
+
+          let mapped = new Map();
+          for (const element of [...balances, balanceObject]) {
+            const amount = mapped.get(element.type_id) || 0;
+            mapped.set(
+              element.type_id,
+              amount +
+                currencyProvider.convertToMainCurrency({
+                  amount: element.amount,
+                  currency: element.currency,
+                }).amount
+            );
+          }
+
+          setBalancesByType([]);
+          for (const [key, value] of mapped) {
+            setBalancesByType((prev) =>
+              [
+                ...prev,
+                {
+                  type_id: key,
+                  amount: value,
+                  name: types.find((type) => type._id === key)?.name,
+                },
+              ].sort((a, b) => b.amount - a.amount)
+            );
+          }
           setToggleAddBalance(false);
         }
       });
@@ -65,28 +98,7 @@ const CreateBalance = ({ setToggleAddBalance, setBalances }) => {
     submitData();
   };
 
-  useEffect(() => {
-    async function fetchData() {
-      setLoading2(true);
-      await httpProvider
-        .get(`${BASE_URL}/balance-types`)
-        .then((data) => {
-          if (data.error) {
-            setError(data.error.toString());
-          } else {
-            setTypes(data);
-          }
-        })
-        .catch((error) => console.log(error) + setError(error.toString()));
-      setLoading2(false);
-    }
-    fetchData();
 
-    return () => {
-      setError('');
-      setTypes('');
-    };
-  }, []);
 
   return (
     <div className='create-balance-modal'>

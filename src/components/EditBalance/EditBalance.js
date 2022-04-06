@@ -8,8 +8,16 @@ import CloseButtoon from 'react-bootstrap/esm/CloseButton';
 import Form from 'react-bootstrap/esm/Form';
 import currencyList from '../../providers/currencyList.json';
 import Loader from './../Base/Loader/Loader';
+import currencyProvider from './../../providers/CurrencyProvider';
 
-const EditBalance = ({ selectedBalance, setBalances, setToggleEditBalance, types }) => {
+const EditBalance = ({
+  selectedBalance,
+  setBalances,
+  setToggleEditBalance,
+  balances,
+  types,
+  setBalancesByType,
+}) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(null);
   const [verificationMessage, setVerificationMessage] = useState('');
@@ -55,7 +63,6 @@ const EditBalance = ({ selectedBalance, setBalances, setToggleEditBalance, types
         if (data.error) {
           setError(data.error);
         } else {
-          setToggleEditBalance(false);
           setBalances((prev) =>
             prev.map((sr) => {
               if (sr._id === selectedBalance._id) {
@@ -65,8 +72,46 @@ const EditBalance = ({ selectedBalance, setBalances, setToggleEditBalance, types
               }
             })
           );
+
+          let mapped = new Map();
+          for (const element of [
+            ...balances.map((sr) => {
+              if (sr._id === selectedBalance._id) {
+                return { ...sr, ...balanceObject };
+              } else {
+                return sr;
+              }
+            }),
+          ]) {
+            const amount = mapped.get(element.type_id) || 0;
+            mapped.set(
+              element.type_id,
+              amount +
+                currencyProvider.convertToMainCurrency({
+                  amount: element.amount,
+                  currency: element.currency,
+                }).amount
+            );
+          }
+
+          setBalancesByType([]);
+          for (const [key, value] of mapped) {
+            setBalancesByType((prev) =>
+              [
+                ...prev,
+                {
+                  type_id: key,
+                  amount: value,
+                  name: types.find((type) => type._id === key)?.name,
+                },
+              ].sort((a, b) => b.amount - a.amount)
+            );
+          }
+
+          setToggleEditBalance(false);
         }
-      });
+      })
+      .catch((error) => setError(error.toString()));
     setLoading(false);
   };
 
@@ -83,8 +128,37 @@ const EditBalance = ({ selectedBalance, setBalances, setToggleEditBalance, types
           if (data.error) {
             setError(data.error);
           } else {
-            setToggleEditBalance(false);
             setBalances((prev) => prev.filter((r) => r._id !== selectedBalance._id));
+
+            let mapped = new Map();
+            for (const element of balances.filter((r) => r._id !== selectedBalance._id)) {
+              const amount = mapped.get(element.type_id) || 0;
+              mapped.set(
+                element.type_id,
+                amount +
+                  currencyProvider.convertToMainCurrency({
+                    amount: element.amount,
+                    currency: element.currency,
+                  }).amount
+              );
+            }
+  
+            setBalancesByType([]);
+            for (const [key, value] of mapped) {
+              setBalancesByType((prev) =>
+                [
+                  ...prev,
+                  {
+                    type_id: key,
+                    amount: value,
+                    name: types.find((type) => type._id === key)?.name,
+                  },
+                ].sort((a, b) => b.amount - a.amount)
+              );
+            }
+
+
+            setToggleEditBalance(false);
           }
         })
         .catch((error) => setError(error.toString()));

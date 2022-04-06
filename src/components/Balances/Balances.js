@@ -46,11 +46,14 @@ const Balances = () => {
 
             for (const element of data) {
               const amount = mapped.get(element.type_id) || 0;
-              mapped.set(element.type_id, amount +
-                currencyProvider.convertToMainCurrency({
-                  amount: element.amount,
-                  currency: element.currency,
-                }).amount);
+              mapped.set(
+                element.type_id,
+                amount +
+                  currencyProvider.convertToMainCurrency({
+                    amount: element.amount,
+                    currency: element.currency,
+                  }).amount
+              );
             }
           }
         })
@@ -99,13 +102,21 @@ const Balances = () => {
             setToggleEditBalance={setToggleEditBalance}
             setBalances={setBalances}
             selectedBalance={selectedBalance}
+            setBalancesByType={setBalancesByType}
             types={types}
+            balances={balances}
           />
         </div>
       )}
       {toggleAddBalance && (
         <div ref={ref1}>
-          <CreateBalance setToggleAddBalance={setToggleAddBalance} setBalances={setBalances} />
+          <CreateBalance
+            setToggleAddBalance={setToggleAddBalance}
+            setBalances={setBalances}
+            balances={balances}
+            types={types}
+            setBalancesByType={setBalancesByType}
+          />
         </div>
       )}
       <Button onClick={() => setToggleAddBalance(true)}>Add New Balance </Button>
@@ -117,21 +128,21 @@ const Balances = () => {
         <div>
           <div className='balances-chart-section'>
             <PieChart
-              data={balances.map((b) => b.amount)}
-              labels={balances.map((b) => b.description)}
+              data={balances.filter((d) => !d.is_liability).map((b) => b.amount)}
+              labels={balances.filter((d) => !d.is_liability).map((b) => b.description)}
               height={'375px'}
               width={'355px'}
               title={`Current Balances Total: ${currency} ${currencyProvider.sumToMainCurrency(
-                  balances
-                )}`}
+                balances.filter((b) => !b.is_liability)
+              )}`}
             />
             <PieChart
-              data={balancesByType.map((b) => b.amount)}
-              labels={balancesByType.map((b) => b.name)}
+              data={balancesByType.filter((d) => !d.is_liability).map((b) => b.amount)}
+              labels={balancesByType.filter((d) => !d.is_liability).map((b) => b.name)}
               height={'345px'}
               width={'325px'}
               title={`Current Balances By Type:${currency} ${currencyProvider.sumToMainCurrency(
-                balances
+                balances.filter((b) => !b.is_liability)
               )}`}
             />
           </div>
@@ -161,7 +172,8 @@ const Balances = () => {
                                   setSelectedBalance(balance) + setToggleEditBalance(true)
                                 }
                               >
-                                {balance.description} - {balance.currency} {balance.amount}
+                                {balance.description} - {balance.currency}{' '}
+                                {balance.is_liability ? `(${balance.amount})` : balance.amount}
                               </div>
                             );
                           } else {
@@ -181,7 +193,8 @@ const Balances = () => {
                 <tr>
                   <th colSpan={2}>Totals</th>
                   <th>
-                    {currency} {currencyProvider.sumToMainCurrency(balances)}
+                    {currency}{' '}
+                    {currencyProvider.sumToMainCurrency(balances.filter((b) => !b.is_liability))}
                   </th>
                 </tr>
               </tbody>
