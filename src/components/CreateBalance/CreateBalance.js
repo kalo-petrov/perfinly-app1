@@ -20,8 +20,9 @@ const CreateBalance = ({ setToggleAddBalance, setBalances }) => {
   const [amount, setAmount] = useState('init');
   const [currency, setCurrency] = useState(user.currency);
   const [type, setType] = useState('none');
+  const [isLiability, setIsLiability] = useState(false);
 
-  const submitBalance =  (e) => {
+  const submitBalance = (e) => {
     e.preventDefault();
     setLoading(true);
     const balanceObject = {
@@ -29,6 +30,7 @@ const CreateBalance = ({ setToggleAddBalance, setBalances }) => {
       amount: Number(amount),
       currency,
       type_id: type,
+      is_liability: isLiability,
     };
 
     for (const [key, value] of Object.entries(balanceObject)) {
@@ -59,14 +61,13 @@ const CreateBalance = ({ setToggleAddBalance, setBalances }) => {
         }
       });
       setLoading(false);
-    }
-    submitData()
-
+    };
+    submitData();
   };
 
   useEffect(() => {
     async function fetchData() {
-      setLoading2(true)
+      setLoading2(true);
       await httpProvider
         .get(`${BASE_URL}/balance-types`)
         .then((data) => {
@@ -77,7 +78,7 @@ const CreateBalance = ({ setToggleAddBalance, setBalances }) => {
           }
         })
         .catch((error) => console.log(error) + setError(error.toString()));
-        setLoading2(false)
+      setLoading2(false);
     }
     fetchData();
 
@@ -123,7 +124,18 @@ const CreateBalance = ({ setToggleAddBalance, setBalances }) => {
           </Form.Group>
         </div>
         <div>{!amount && <small>Amount is required</small>}</div>
-
+        <div className='create-balance-input-item'>
+          <div className='create-balance-checkbox'>
+            <Form.Check
+              type='checkbox'
+              label={`Is a liability ${
+                isLiability ? `(Will be reflected as a negative balance!)` : ''
+              }`}
+              value={isLiability}
+              onChange={() => setIsLiability((prev) => !prev)}
+            />
+          </div>
+        </div>
         <div className='create-balance-input-item'>
           <Form.Select
             aria-label='type'
@@ -134,7 +146,7 @@ const CreateBalance = ({ setToggleAddBalance, setBalances }) => {
             disabled={loading2}
           >
             <option key={0.1} value='none' disabled hidden>
-            {loading2 ? 'Loading...' : 'Select Type'}
+              {loading2 ? 'Loading...' : 'Select Type'}
             </option>
             {types?.map((t) => {
               return (
@@ -145,6 +157,7 @@ const CreateBalance = ({ setToggleAddBalance, setBalances }) => {
             })}
           </Form.Select>
         </div>
+
         <div className='create-balance-input-item'>
           <Form.Select
             aria-label='currency'

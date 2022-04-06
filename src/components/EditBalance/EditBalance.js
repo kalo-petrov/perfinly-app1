@@ -9,13 +9,7 @@ import Form from 'react-bootstrap/esm/Form';
 import currencyList from '../../providers/currencyList.json';
 import Loader from './../Base/Loader/Loader';
 
-const EditBalance = ({
-  selectedBalance,
-  setBalances,
-  setToggleEditBalance,
-  types,
-}) => {
-
+const EditBalance = ({ selectedBalance, setBalances, setToggleEditBalance, types }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(null);
   const [verificationMessage, setVerificationMessage] = useState('');
@@ -24,16 +18,17 @@ const EditBalance = ({
   const [amount, setAmount] = useState(selectedBalance.amount);
   const [currency, setCurrency] = useState(selectedBalance.currency);
   const [type, setType] = useState(selectedBalance.type_id);
-
+  const [isLiability, setIsLiability] = useState(false);
 
   const submitEditedBalance = async (e) => {
     e.preventDefault();
-    setLoading(true)
+    setLoading(true);
     const balanceObject = {
       description,
       amount: Number(amount),
       currency,
       type_id: type,
+      is_liability: isLiability,
     };
 
     for (const [key, value] of Object.entries(balanceObject)) {
@@ -54,28 +49,30 @@ const EditBalance = ({
       }
     }
 
-    await httpProvider.put(`${BASE_URL}/balances/${selectedBalance._id}`, balanceObject).then((data) => {
-      if (data.error) {
-        setError(data.error);
-      } else {
-        setToggleEditBalance(false);
-        setBalances((prev) =>
-          prev.map((sr) => {
-            if (sr._id === selectedBalance._id) {
-              return { ...sr, ...balanceObject };
-            } else {
-              return sr;
-            }
-          })
-        );
-      }
-    });
-    setLoading(false)
+    await httpProvider
+      .put(`${BASE_URL}/balances/${selectedBalance._id}`, balanceObject)
+      .then((data) => {
+        if (data.error) {
+          setError(data.error);
+        } else {
+          setToggleEditBalance(false);
+          setBalances((prev) =>
+            prev.map((sr) => {
+              if (sr._id === selectedBalance._id) {
+                return { ...sr, ...balanceObject };
+              } else {
+                return sr;
+              }
+            })
+          );
+        }
+      });
+    setLoading(false);
   };
 
   const deleteBalance = async (e) => {
     e.preventDefault();
-    
+
     if (
       window.confirm(`Are you sure you want to delete this balance ${selectedBalance.description}?`)
     ) {
@@ -88,11 +85,10 @@ const EditBalance = ({
           } else {
             setToggleEditBalance(false);
             setBalances((prev) => prev.filter((r) => r._id !== selectedBalance._id));
-            
           }
         })
         .catch((error) => setError(error.toString()));
-        setLoading(false)
+      setLoading(false);
     } else {
       return;
     }
@@ -138,6 +134,19 @@ const EditBalance = ({
           </Form.Group>
         </div>
         <div>{!amount && <small>Description is required</small>}</div>
+
+        <div className='editable-balance-item'>
+          <div className='edit-balance-checkbox'>
+            <Form.Check
+              type='checkbox'
+              label={`Is a liability ${
+                isLiability ? `(Will be reflected as a negative balance!)` : ''
+              }`}
+              value={isLiability}
+              onChange={() => setIsLiability((prev) => !prev)}
+            />
+          </div>
+        </div>
 
         <div className='editable-balance-item'>
           <Form.Select
