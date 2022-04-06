@@ -15,7 +15,7 @@ import CreateSpendRecord from './../CreateSpendRecord/CreateSpendRecord';
 import CreateBalance from './../CreateBalance/CreateBalance';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllSpendRecords } from './../../actions/index';
-import getSymbolFromCurrency from 'currency-symbol-map'
+import getSymbolFromCurrency from 'currency-symbol-map';
 
 function Dashboard() {
   const [error, setError] = useState(null);
@@ -44,13 +44,13 @@ function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      
+
       const thisMonthStart = moment().startOf('month').format('yyyy-MM-DD');
       const thisMonthEnd = moment().endOf('month').format('yyyy-MM-DD');
 
       await httpProvider
         .get(`${BASE_URL}/spending?start_date=${thisMonthStart}&end_date=${thisMonthEnd}`)
-        .then((data) => {
+        .then(async (data) => {
           if (data.error) {
             setError(data.error.toString());
           } else {
@@ -72,26 +72,28 @@ function Dashboard() {
 
             const OBJArr = [];
 
-            httpProvider
-              .get(`${BASE_URL}/spend-categories`)
-              .then((categories) => {
-                if (categories.error) {
-                  setError(categories.error.toString());
-                } else {
-                  setCategories(categories);
-                  for (const [key, value] of mapped) {
-                    OBJArr.push({
-                      category_id: key,
-                      amount: value,
-                      name: categories.find((c) => c._id === key)?.name,
-                      currency: getSymbolFromCurrency(currency)
-                    });
+            const fetchD = async () => {
+              await httpProvider
+                .get(`${BASE_URL}/spend-categories`)
+                .then((categories) => {
+                  if (categories.error) {
+                    setError(categories.error.toString());
+                  } else {
+                    setCategories(categories);
+                    for (const [key, value] of mapped) {
+                      OBJArr.push({
+                        category_id: key,
+                        amount: value,
+                        name: categories.find((c) => c._id === key)?.name,
+                        currency: getSymbolFromCurrency(currency),
+                      });
+                    }
+                    setSpendByCategoryThisMonth(OBJArr.sort((a, b) => b.amount - a.amount));
                   }
-                  setSpendByCategoryThisMonth(OBJArr);
-                 
-                }
-              })
-              .catch((error) => console.log(error) + setError(error.toString()));
+                })
+                .catch((error) => console.log(error) + setError(error.toString()));
+            };
+            await fetchD();
           }
         })
         .catch((error) => setError(error.toString()));
@@ -125,12 +127,13 @@ function Dashboard() {
 
       await httpProvider
         .get(`${BASE_URL}/balances`)
-        .then((data) => {
+        .then(async (data) => {
           if (data.error) {
             setError(data.error.toString());
           } else {
             setBalances(data);
             const mapped = new Map();
+            console.log('setting balances');
 
             for (const element of data) {
               const amount = mapped.get(element.type_id) || 0;
@@ -151,6 +154,7 @@ function Dashboard() {
                   if (balance_types.error) {
                     setError(balance_types.error.toString());
                   } else {
+                    console.log('setting balance types');
                     setBalancesByType([]);
                     for (const [key, value] of mapped) {
                       setBalancesByType((prev) => [
@@ -167,12 +171,12 @@ function Dashboard() {
                 .catch((error) => setError(error.toString()));
             };
 
-            fetch2();
+            await fetch2();
           }
         })
         .catch((error) => setError(error.toString()));
 
-      setLoading(false);
+       setLoading(false)
     };
 
     fetchData();
@@ -190,9 +194,9 @@ function Dashboard() {
     setIsComponentVisible: setToggleAddBalance,
   } = useComponentVisible(false);
 
-  currencyProvider.convertToMainCurrency({ amount: 10, currency: 'BGN' });
-
-
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className='dashboard-container'>
@@ -210,74 +214,71 @@ function Dashboard() {
           <CreateBalance setToggleAddBalance={setToggleAddBalance} setBalances={setBalances} />
         </div>
       )}
-      {loading ? (
-        <Loader />
-      ) : (
-        <div>
-          <div className='total-spend-dashboard'>
-            {' '}
-            <div className='total-spend-dashboard-item'>
-              {spendByCategoryThisMonth.length > 0 ? (
-                <PieChart
-                  data={spendByCategoryThisMonth.map((s) => s.amount)}
-                  labels={spendByCategoryThisMonth.map((s) => `${s.name} (${getSymbolFromCurrency(currency)})`)}
-                  height={'345px'}
-                  width={'325px'}
-                  title={`Spend By Category This Month: Total:  ${currency} ${currencyProvider.sumToMainCurrency(
-                    allSpendRecords
-                  )}`}
-                />
-              ) : (
-                <div className='no-info-text'>
-                  NO SPEND RECORDS THIS MONTH.
-                  <br />
-                  <Button variant='primary' onClick={() => setToggleAddSpend((prev) => !prev)}>
-                    Add You First Spend
-                  </Button>
-                </div>
-              )}
-            </div>
-            <div className='total-spend-dashboard-item'>
-              <LineChart
-                labelArray={sixMonthsLabels().map((l) => l.monthEnd)}
-                dataArray={lastSixMonthsSpend}
-                label={`monthly spend (in ${currency})`}
-                // height={'100px'}
-                // width={'100px'}
-                title='Last 6 Months Expenditure'
+
+      <div>
+        <div className='total-spend-dashboard'>
+          {' '}
+          <div className='total-spend-dashboard-item'>
+            {spendByCategoryThisMonth.length > 0 ? (
+              <PieChart
+                data={spendByCategoryThisMonth.map((s) => s.amount)}
+                labels={spendByCategoryThisMonth.map(
+                  (s) => `${s.name} (${getSymbolFromCurrency(currency)})`
+                )}
+                height={'345px'}
+                width={'325px'}
+                title={`Spend By Category This Month: Total:  ${currency} ${currencyProvider.sumToMainCurrency(
+                  allSpendRecords
+                )}`}
               />
-            </div>
+            ) : (
+              <div className='no-info-text'>
+                NO SPEND RECORDS THIS MONTH.
+                <br />
+                <Button variant='primary' onClick={() => setToggleAddSpend((prev) => !prev)}>
+                  Add You First Spend
+                </Button>
+              </div>
+            )}
           </div>
-          <div className='total-spend-dashboard'>
-            {' '}
-            <div className='total-spend-dashboard-item'>
-              {balancesByType.length > 0 ? (
-                <PieChart
-                  data={balancesByType.map((b) => b.amount)}
-                  labels={balancesByType.map((b) => `${b.name} (${getSymbolFromCurrency(currency)})`)}
-                  height={'345px'}
-                  width={'325px'}
-                  title={`Current Balances Total: ${currency} ${currencyProvider.sumToMainCurrency(
-                    balances
-                  )}`}
-                />
-              ) : (
-                <div className='no-info-text'>
-                  NO BALANCES ADDED.
-                  <br />
-                  <Button variant='primary' onClick={() => setToggleAddBalance((prev) => !prev)}>
-                    Add You First Balance
-                  </Button>
-                  <br />
-                  <br />
-                </div>
-              )}
-            </div>
+          <div className='total-spend-dashboard-item'>
+            <LineChart
+              labelArray={sixMonthsLabels().map((l) => l.monthEnd)}
+              dataArray={lastSixMonthsSpend}
+              label={`monthly spend (in ${currency})`}
+              // height={'100px'}
+              // width={'100px'}
+              title='Last 6 Months Expenditure'
+            />
           </div>
-
-
         </div>
-      )}
+        <div className='total-spend-dashboard'>
+          {' '}
+          <div className='total-spend-dashboard-item'>
+            {balancesByType.length > 0 ? (
+              <PieChart
+                data={balancesByType.map((b) => b.amount)}
+                labels={balancesByType.map((b) => `${b.name} (${getSymbolFromCurrency(currency)})`)}
+                height={'345px'}
+                width={'325px'}
+                title={`Current Balances Total: ${currency} ${currencyProvider.sumToMainCurrency(
+                  balances
+                )}`}
+              />
+            ) : (
+              <div className='no-info-text'>
+                NO BALANCES ADDED.
+                <br />
+                <Button variant='primary' onClick={() => setToggleAddBalance((prev) => !prev)}>
+                  Add You First Balance
+                </Button>
+                <br />
+                <br />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
