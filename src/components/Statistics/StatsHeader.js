@@ -89,11 +89,6 @@ const StatsHeader = ({
     setToDate(new Date(moment().endOf('isoWeek')));
   };
 
-  const lastWeek = () => {
-    setFromDate(new Date(moment().subtract(1, 'week').startOf('isoWeek')));
-    setToDate(new Date(moment().subtract(1, 'week').endOf('isoWeek')));
-  };
-
   const monthToDate = () => {
     setFromDate(new Date(moment().startOf('month')));
     setToDate(new Date(moment()));
@@ -101,10 +96,13 @@ const StatsHeader = ({
   const thisMonth = () => {
     setFromDate(new Date(moment().startOf('month')));
     setToDate(new Date(moment().endOf('month')));
-    console.log(new Date(moment().endOf('month')));
   };
   const lastMonth = () => {
     setFromDate(new Date(moment().subtract(1, 'month').startOf('month')));
+    setToDate(new Date(moment().subtract(1, 'month').endOf('month')));
+  };
+  const last6Months = () => {
+    setFromDate(new Date(moment().subtract(5, 'month').startOf('month')));
     setToDate(new Date(moment().subtract(1, 'month').endOf('month')));
   };
 
@@ -193,9 +191,6 @@ const StatsHeader = ({
                   <Button variant='outline-dark' onClick={thisWeek}>
                     This Week
                   </Button>
-                  <Button variant='outline-dark' onClick={lastWeek}>
-                    Last Week
-                  </Button>
                   <Button variant='outline-dark' onClick={monthToDate}>
                     Month To Date
                   </Button>
@@ -204,6 +199,9 @@ const StatsHeader = ({
                   </Button>
                   <Button variant='outline-dark' onClick={lastMonth}>
                     Last Month
+                  </Button>
+                  <Button variant='outline-dark' onClick={last6Months}>
+                    Last 6 Months
                   </Button>
                   <div>-------</div>
                   <div></div>
