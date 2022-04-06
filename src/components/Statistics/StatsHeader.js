@@ -85,13 +85,13 @@ const StatsHeader = ({
   };
 
   const thisWeek = () => {
-    setFromDate(new Date(moment().startOf('week')));
-    setToDate(new Date(moment().endOf('week')));
+    setFromDate(new Date(moment().startOf('isoWeek')));
+    setToDate(new Date(moment().endOf('isoWeek')));
   };
 
   const lastWeek = () => {
-    setFromDate(new Date(moment().subtract(1, 'week').startOf('week')));
-    setToDate(new Date(moment().subtract(1, 'week').endOf('week')));
+    setFromDate(new Date(moment().subtract(1, 'week').startOf('isoWeek')));
+    setToDate(new Date(moment().subtract(1, 'week').endOf('isoWeek')));
   };
 
   const monthToDate = () => {
@@ -183,6 +183,7 @@ const StatsHeader = ({
                   modifiers={modifiers}
                   modifiersStyles={modifiersStyles}
                   onDayMouseEnter={(e) => handleDayMouseEnter(e)}
+                  firstDayOfWeek={1}
                 />
 
                 <div className='day-picker-options'>
