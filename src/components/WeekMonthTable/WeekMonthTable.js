@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getAllSpendRecords } from '../../actions';
 import currencyProvider from '../../providers/CurrencyProvider';
 import AuthContext from '../../context/AuthContext';
+import getSymbolFromCurrency from 'currency-symbol-map'
 
 const WeekMonthTable = ({
   confirmedFromDate,
@@ -124,14 +125,14 @@ const WeekMonthTable = ({
                         {' '}
                         {d.weekStart} - {d.weekEnd}
                       </th>
-                      <th>
+                      <th> 
                         {currencyProvider.sumToMainCurrency(
                           allSpendRecords.filter(
                             (sp) =>
                             sp.date.slice(0,10) >= d.weekStart.slice(0,10) &&
                             sp.date.slice(0,10) <= d.weekEnd.slice(0,10)
                           )
-                        )}{' '}
+                        )} {getSymbolFromCurrency(currency)}
                       </th>
                     </tr>
                   );
@@ -155,7 +156,7 @@ const WeekMonthTable = ({
             <tr>
               <th> Total On Page</th>
               <th>
-                {currency} {currencyProvider.sumToMainCurrency(thisMonthSpendRecords)}
+                {currencyProvider.sumToMainCurrency(thisMonthSpendRecords)} {getSymbolFromCurrency(currency)}
               </th>
             </tr>
           </tbody>

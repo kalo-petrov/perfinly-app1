@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Line } from 'react-chartjs-2';
 import './LineChart.css';
 import {
@@ -13,6 +13,8 @@ import {
   PointElement,
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import getSymbolFromCurrency from 'currency-symbol-map';
+import AuthContext from '../../../context/AuthContext';
 
 ChartJS.register(
   CategoryScale,
@@ -26,6 +28,8 @@ ChartJS.register(
 );
 
 const LineChart = ({ labelArray, dataArray, label = 'label', title = 'title', height, width }) => {
+  const currency = useContext(AuthContext).user.currency;
+
   const data = {
     labels: labelArray,
     datasets: [
@@ -44,6 +48,11 @@ const LineChart = ({ labelArray, dataArray, label = 'label', title = 'title', he
     scales: {
       y: {
         beginAtZero: true,
+        ticks: {
+          callback: function (value, index, ticks) {
+            return `${getSymbolFromCurrency(currency)} ` + value;
+          },
+        },
       },
     },
     plugins: {
@@ -55,6 +64,7 @@ const LineChart = ({ labelArray, dataArray, label = 'label', title = 'title', he
       },
     },
   };
+
   return (
     <div className='bar-chart-container'>
       <h3>{title}</h3>

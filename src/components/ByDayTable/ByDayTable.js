@@ -1,11 +1,12 @@
 import './ByDayTable.css';
 import IndividualSpend from '../IndividualSpend/IndividualSpend';
 import dateProvider from '../../providers/dateProvider';
-import React, { useState,  useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import Button from 'react-bootstrap/esm/Button';
-import {  useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import AuthContext from '../../context/AuthContext';
 import currencyProvider from '../../providers/CurrencyProvider';
+import getSymbolFromCurrency from 'currency-symbol-map';
 
 const ByDayByCategoryTable = ({
   categories,
@@ -22,7 +23,6 @@ const ByDayByCategoryTable = ({
   const [catOrSubCat, setCatOrSubcat] = useState('cat');
 
   const allSpendRecords = useSelector((state) => state.spendRecords);
-
 
   const currency = useContext(AuthContext).user.currency;
 
@@ -68,7 +68,8 @@ const ByDayByCategoryTable = ({
                     allSpendRecords.filter(
                       (sp) => new Date(sp.date).getDate() === new Date(d).getDate()
                     )
-                  )}
+                  )}{' '}
+                  {getSymbolFromCurrency(currency)}
                 </th>
                 {(catOrSubCat === 'cat' ? categories : subcategories)?.map((c) => {
                   const spendsForDayAndCategory = allSpendRecords.filter((r) => {
@@ -117,7 +118,8 @@ const ByDayByCategoryTable = ({
           <tr>
             <th> Total On Page</th>
             <th>
-              {currency} {currencyProvider.sumToMainCurrency(allSpendRecords)}
+              {currencyProvider.sumToMainCurrency(allSpendRecords)}{' '}
+              {getSymbolFromCurrency(currency)}{' '}
             </th>
             {(catOrSubCat === 'cat' ? categories : subcategories)?.map((c) => {
               return (
@@ -126,7 +128,8 @@ const ByDayByCategoryTable = ({
                     allSpendRecords.filter(
                       (sp) => (catOrSubCat === 'cat' ? sp.category_id : sp.subcategory_id) === c._id
                     )
-                  ) || '0'}
+                  ) || '0'}{' '}
+                  {getSymbolFromCurrency(currency)}{' '}
                 </td>
               );
             })}

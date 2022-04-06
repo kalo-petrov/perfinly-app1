@@ -37,6 +37,8 @@ const PieChart = ({data, labels, height, width, title}) => {
       
     ],
   };
+
+
   return (
     <div>
       <div className='App'>

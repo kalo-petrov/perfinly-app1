@@ -1,5 +1,6 @@
 import React from 'react';
 import './IndividualSpend.css';
+import getSymbolFromCurrency from 'currency-symbol-map'
 
 const IndividualSpend = ({ spendRecord, keys, setToggleEdit, setSelectedSpend }) => {
   return (
@@ -10,7 +11,7 @@ const IndividualSpend = ({ spendRecord, keys, setToggleEdit, setSelectedSpend })
         onClick={() => setToggleEdit((prev) => !prev)}
       >
         {' '}
-        {`${spendRecord?.description}: ${spendRecord.currency} ${spendRecord.amount}`}
+        {`${spendRecord?.description}: ${getSymbolFromCurrency(spendRecord.currency)}${spendRecord.amount}`}
       </div>
     </div>
   );

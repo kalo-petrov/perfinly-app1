@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import './Dashboard.css';
 import { BASE_URL } from '../../common/constants';
 import httpProvider from '../../providers/httpProvider';
-import InfoCard from '../InfoCard/InfoCard';
 import moment from 'moment';
 import Error from '../Base/Error/Error';
 import PieChart from '../Charts/PieChart/PieChart';
@@ -16,6 +15,7 @@ import CreateSpendRecord from './../CreateSpendRecord/CreateSpendRecord';
 import CreateBalance from './../CreateBalance/CreateBalance';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllSpendRecords } from './../../actions/index';
+import getSymbolFromCurrency from 'currency-symbol-map'
 
 function Dashboard() {
   const [error, setError] = useState(null);
@@ -84,6 +84,7 @@ function Dashboard() {
                       category_id: key,
                       amount: value,
                       name: categories.find((c) => c._id === key)?.name,
+                      currency: getSymbolFromCurrency(currency)
                     });
                   }
                   setSpendByCategoryThisMonth(OBJArr);
@@ -191,32 +192,7 @@ function Dashboard() {
 
   currencyProvider.convertToMainCurrency({ amount: 10, currency: 'BGN' });
 
-  useEffect(() => {
-    const mapped = new Map();
 
-    for (const element of allSpendRecords) {
-      const amount = mapped.get(element.category_id) || 0;
-      mapped.set(
-        element.category_id,
-        amount +
-          currencyProvider.convertToMainCurrency({
-            amount: element.amount,
-            currency: element.currency,
-          }).amount
-      );
-    }
-
-    const OBJArr = [];
-    for (const [key, value] of mapped) {
-      OBJArr.push({
-        category_id: key,
-        amount: value,
-        name: categories.find((c) => c._id === key)?.name,
-      });
-    }
-
-    setSpendByCategoryThisMonth(OBJArr.sort((a, b) => b.amount - a.amount));
-  }, [toggleAddSpend, allSpendRecords, categories]);
 
   return (
     <div className='dashboard-container'>
@@ -244,7 +220,7 @@ function Dashboard() {
               {spendByCategoryThisMonth.length > 0 ? (
                 <PieChart
                   data={spendByCategoryThisMonth.map((s) => s.amount)}
-                  labels={spendByCategoryThisMonth.map((s) => s.name)}
+                  labels={spendByCategoryThisMonth.map((s) => `${s.name} (${getSymbolFromCurrency(currency)})`)}
                   height={'345px'}
                   width={'325px'}
                   title={`Spend By Category This Month: Total:  ${currency} ${currencyProvider.sumToMainCurrency(
@@ -278,7 +254,7 @@ function Dashboard() {
               {balancesByType.length > 0 ? (
                 <PieChart
                   data={balancesByType.map((b) => b.amount)}
-                  labels={balancesByType.map((b) => b.name)}
+                  labels={balancesByType.map((b) => `${b.name} (${getSymbolFromCurrency(currency)})`)}
                   height={'345px'}
                   width={'325px'}
                   title={`Current Balances Total: ${currency} ${currencyProvider.sumToMainCurrency(
