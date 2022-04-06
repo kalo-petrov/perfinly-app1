@@ -128,8 +128,8 @@ const WeekMonthTable = ({
                         {currencyProvider.sumToMainCurrency(
                           allSpendRecords.filter(
                             (sp) =>
-                              moment(sp.date).format('yyyy-MM-DD') >= d.weekStart &&
-                              moment(sp.date).format('yyyy-MM-DD') <= d.weekEnd
+                            sp.date.slice(0,10) >= d.weekStart.slice(0,10) &&
+                            sp.date.slice(0,10) <= d.weekEnd.slice(0,10)
                           )
                         )}{' '}
                       </th>
@@ -144,10 +144,9 @@ const WeekMonthTable = ({
                         {currencyProvider.sumToMainCurrency(
                           allSpendRecords.filter(
                             (sp) =>
-                              moment(sp.date).format('yyyy-MM-DD') >= d &&
-                              moment(sp.date).format('yyyy-MM-DD') <=
-                                moment(d).endOf('month').format('yyyy-MM-DD')
-                          )
+                            sp.date.slice(0,10) >= d.slice(0,10) &&
+                            sp.date.slice(0,10) <= moment(d).endOf('month').format('yyyy-MM-DD')
+                             )
                         )}
                       </th>
                     </tr>

@@ -148,7 +148,7 @@ const MainStats = () => {
           allSpendRecords.filter(
             (sr) =>
               moment(sr.date.slice(0, 10)).format('yyyy-MM-DD') ===
-              moment(d).startOf('day').format('yyyy-MM-DD')
+              moment(d.slice(0, 10)).startOf('day').format('yyyy-MM-DD')
           )
         );
       });
@@ -157,8 +157,8 @@ const MainStats = () => {
         return currencyProvider.sumToMainCurrency(
           allSpendRecords.filter(
             (sr) =>
-              moment(sr.date).format('yyyy-MM-DD') >= d.weekStart &&
-              moment(sr.date).format('yyyy-MM-DD') <= d.weekEnd
+              moment(sr.date.slice(0, 10)).format('yyyy-MM-DD') >= d.weekStart &&
+              moment(sr.date.slice(0, 10)).format('yyyy-MM-DD') <= d.weekEnd
           )
         );
       });
@@ -167,8 +167,8 @@ const MainStats = () => {
         return currencyProvider.sumToMainCurrency(
           allSpendRecords.filter(
             (sr) =>
-              moment(sr.date).format('yyyy-MM-DD') >= d &&
-              moment(sr.date).format('yyyy-MM-DD') <= moment(d).add(1, 'month').format('yyyy-MM-DD')
+              moment(sr.date.slice(0, 10)).format('yyyy-MM-DD') >= d.slice(0, 10) &&
+              moment(sr.date.slice(0, 10)).format('yyyy-MM-DD') < moment(d.slice(0, 10)).add(1, 'month').format('yyyy-MM-DD')
           )
         );
       });

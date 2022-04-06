@@ -129,10 +129,8 @@ function Dashboard() {
                 currencyProvider.sumToMainCurrency(
                   data.filter(
                     (d) =>
-                      moment(d.date).format('yyyy-MM-DD') >=
-                        moment(sixMonthsLabels()[i].monthStart).format('yyyy-MM-DD') &&
-                      moment(d.date).format('yyyy-MM-DD') <=
-                        moment(sixMonthsLabels()[i].monthEnd).format('yyyy-MM-DD')
+                      d.date.slice(0,10) >= sixMonthsLabels()[i].monthStart.slice(0,10) &&
+                      d.date.slice(0,10) <= sixMonthsLabels()[i].monthEnd.slice(0,10)
                   )
                 )
               );
