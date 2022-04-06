@@ -17,11 +17,8 @@ import CreateBalance from './../CreateBalance/CreateBalance';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllSpendRecords } from './../../actions/index';
 
-
 function Dashboard() {
   const [error, setError] = useState(null);
-  const [spendLastMonth, setSpendLastMonth] = useState([]);
-  const [topCategoryThisMonth, setTopCategoryThisMonth] = useState({ category: '', amount: 0 });
   const [loading, setLoading] = useState(false);
   const [spendByCategoryThisMonth, setSpendByCategoryThisMonth] = useState([]);
   const [lastSixMonthsSpend, setLastSixMonthsSpend] = useState([]);
@@ -31,7 +28,7 @@ function Dashboard() {
 
   const currency = useContext(AuthContext).user.currency;
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const allSpendRecords = useSelector((state) => state.spendRecords);
 
   const sixMonthsLabels = () => {
@@ -47,20 +44,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const lastMonthStart = moment().subtract(1, 'months').startOf('month').format('yyyy-MM-DD');
-      const lastMonthEnd = moment().subtract(1, 'months').endOf('month').format('yyyy-MM-DD');
-
-      await httpProvider
-        .get(`${BASE_URL}/spending?start_date=${lastMonthStart}&end_date=${lastMonthEnd}`)
-        .then((data) => {
-          if (data.error) {
-            setError(data.error.toString());
-          } else {
-            setSpendLastMonth(data);
-          }
-        })
-        .catch((error) => setError(error.toString()));
-
+      
       const thisMonthStart = moment().startOf('month').format('yyyy-MM-DD');
       const thisMonthEnd = moment().endOf('month').format('yyyy-MM-DD');
 
@@ -70,7 +54,7 @@ function Dashboard() {
           if (data.error) {
             setError(data.error.toString());
           } else {
-            dispatch(getAllSpendRecords(data))
+            dispatch(getAllSpendRecords(data));
 
             const mapped = new Map();
 
@@ -94,7 +78,7 @@ function Dashboard() {
                 if (categories.error) {
                   setError(categories.error.toString());
                 } else {
-                  setCategories(categories)
+                  setCategories(categories);
                   for (const [key, value] of mapped) {
                     OBJArr.push({
                       category_id: key,
@@ -102,10 +86,8 @@ function Dashboard() {
                       name: categories.find((c) => c._id === key)?.name,
                     });
                   }
-
-
                   setSpendByCategoryThisMonth(OBJArr);
-                  setTopCategoryThisMonth(OBJArr.sort((a, b) => b.amount - a.amount)[0]);
+                 
                 }
               })
               .catch((error) => console.log(error) + setError(error.toString()));
@@ -129,8 +111,8 @@ function Dashboard() {
                 currencyProvider.sumToMainCurrency(
                   data.filter(
                     (d) =>
-                      d.date.slice(0,10) >= sixMonthsLabels()[i].monthStart.slice(0,10) &&
-                      d.date.slice(0,10) <= sixMonthsLabels()[i].monthEnd.slice(0,10)
+                      d.date.slice(0, 10) >= sixMonthsLabels()[i].monthStart.slice(0, 10) &&
+                      d.date.slice(0, 10) <= sixMonthsLabels()[i].monthEnd.slice(0, 10)
                   )
                 )
               );
@@ -151,33 +133,40 @@ function Dashboard() {
 
             for (const element of data) {
               const amount = mapped.get(element.type_id) || 0;
-              mapped.set(element.type_id,  amount +
-                currencyProvider.convertToMainCurrency({
-                  amount: element.amount,
-                  currency: element.currency,
-                }).amount);
+              mapped.set(
+                element.type_id,
+                amount +
+                  currencyProvider.convertToMainCurrency({
+                    amount: element.amount,
+                    currency: element.currency,
+                  }).amount
+              );
             }
 
-            httpProvider
-              .get(`${BASE_URL}/balance-types`)
-              .then((balance_types) => {
-                if (balance_types.error) {
-                  setError(balance_types.error.toString());
-                } else {
-                  setBalancesByType([]);
-                  for (const [key, value] of mapped) {
-                    setBalancesByType((prev) => [
-                      ...prev,
-                      {
-                        type_id: key,
-                        amount: value,
-                        name: balance_types.find((type) => type._id === key)?.name,
-                      },
-                    ]);
+            const fetch2 = async () => {
+              await httpProvider
+                .get(`${BASE_URL}/balance-types`)
+                .then((balance_types) => {
+                  if (balance_types.error) {
+                    setError(balance_types.error.toString());
+                  } else {
+                    setBalancesByType([]);
+                    for (const [key, value] of mapped) {
+                      setBalancesByType((prev) => [
+                        ...prev,
+                        {
+                          type_id: key,
+                          amount: value,
+                          name: balance_types.find((type) => type._id === key)?.name,
+                        },
+                      ]);
+                    }
                   }
-                }
-              })
-              .catch((error) => setError(error.toString()));
+                })
+                .catch((error) => setError(error.toString()));
+            };
+
+            fetch2();
           }
         })
         .catch((error) => setError(error.toString()));
@@ -227,7 +216,7 @@ function Dashboard() {
     }
 
     setSpendByCategoryThisMonth(OBJArr.sort((a, b) => b.amount - a.amount));
-  }, [toggleAddSpend, allSpendRecords, categories])
+  }, [toggleAddSpend, allSpendRecords, categories]);
 
   return (
     <div className='dashboard-container'>
@@ -255,7 +244,7 @@ function Dashboard() {
               {spendByCategoryThisMonth.length > 0 ? (
                 <PieChart
                   data={spendByCategoryThisMonth.map((s) => s.amount)}
-                  labels={spendByCategoryThisMonth.map((s) => s.name )}
+                  labels={spendByCategoryThisMonth.map((s) => s.name)}
                   height={'345px'}
                   width={'325px'}
                   title={`Spend By Category This Month: Total:  ${currency} ${currencyProvider.sumToMainCurrency(
@@ -310,25 +299,7 @@ function Dashboard() {
             </div>
           </div>
 
-          <div className='info-card-container'>
-            <InfoCard
-              title={'TOTAL SPEND LAST MONTH'}
-              currency={currency}
-              amount={currencyProvider.sumToMainCurrency(spendLastMonth)}
-            />
-            <InfoCard
-              title={'TOTAL SPEND THIS MONTH'}
-              currency={currency}
-              amount={currencyProvider.sumToMainCurrency(allSpendRecords)}
-            />
-            <InfoCard
-              title={`TOP SPEND CATEGORY THIS MONTH: ${
-                topCategoryThisMonth?.name?.toUpperCase() || `None`
-              }`}
-              currency={currency}
-              amount={topCategoryThisMonth?.amount?.toFixed(2)}
-            />
-          </div>
+
         </div>
       )}
     </div>
