@@ -7,6 +7,7 @@ import { BASE_URL } from '../../common/constants';
 import GoogleLogin from 'react-google-login';
 import Error from './../Base/Error/Error';
 import Loader from './../Base/Loader/Loader';
+import logo from './../../assets/FullNameLogo-vec.png';
 
 const required = (value) => value.trim().length >= 1;
 const minLen = (len) => (value) => value.trim().length >= len;
@@ -74,12 +75,12 @@ const LogInPage = (props) => {
         props.history.push('/dashboard');
       })
       .catch((error) => console.error(`${error}`, 'Please try again!', 'error'));
-      setLoading(false);
+    setLoading(false);
   };
 
   const loginWithGoogle = async (googleData) => {
     if (googleData?.error) {
-      console.log('Google-signin-error')
+      console.log('Google-signin-error');
       return;
     }
     setLoading(true);
@@ -127,10 +128,23 @@ const LogInPage = (props) => {
     <div className='container1'>
       {error && <Error error={error} setError={setError} />}
       <Form>
-        <h1>Login</h1>
+        <img name='dashboard' id='header-full-logo' src={logo} alt='logo'></img>
+        <hr style={{ marginLeft: '10%', marginRight: '10%' }} />
+        <h3>Log in and start tracking your expenses</h3>
         <br></br>
+        <GoogleLogin
+          clientId={'795141151204-qeebg8jipm8oc764kvd1qrmbvndflto9.apps.googleusercontent.com'}
+          buttonText='Log in with Google'
+          onSuccess={loginWithGoogle}
+          onFailure={loginWithGoogle}
+          cookiePolicy={'single_host_origin'}
+          disabled={false}
+        />
+        <br />
+        <br />
+        <p>OR</p>
         <Form.Group controlId='formBasicUsername'>
-          <h3>Username</h3>
+          <h5>Username</h5>
           <div className='input'>
             <div>
               <Form.Control
@@ -152,7 +166,7 @@ const LogInPage = (props) => {
         </Form.Group>
 
         <Form.Group controlId='formBasicPassword'>
-          <h3>Password</h3>
+          <h5>Password</h5>
           <div className='input'>
             <div>
               <Form.Control
@@ -181,18 +195,6 @@ const LogInPage = (props) => {
         >
           Login
         </button>
-        <br />
-        <br />
-
-        <GoogleLogin
-          clientId={'795141151204-qeebg8jipm8oc764kvd1qrmbvndflto9.apps.googleusercontent.com'}
-          buttonText='Log in with Google'
-          onSuccess={loginWithGoogle}
-          onFailure={loginWithGoogle}
-          cookiePolicy={'single_host_origin'}
-          disabled={false}
-        />
-
         <br />
         <br />
         <p>Don't have an Account?</p>

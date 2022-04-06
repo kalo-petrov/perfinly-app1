@@ -7,7 +7,9 @@ import { BASE_URL } from '../../common/constants';
 import httpProvider from '../../providers/httpProvider';
 import GoogleLogin from 'react-google-login';
 import Error from './../Base/Error/Error';
+import logo from './../../assets/FullNameLogo-vec.png';
 import * as SVGLoaders from 'svg-loaders-react';
+import Loader from '../Base/Loader/Loader';
 
 const required = (value) => value.trim().length >= 1;
 const minLen = (len) => (value) => value.trim().length >= len;
@@ -122,6 +124,7 @@ const RegisterPage = (props) => {
 
   const loginWithGoogle = async (googleData) => {
     if (googleData?.error) {
+      console.log('Google-signin-error');
       return;
     }
     setLoading(true);
@@ -140,12 +143,13 @@ const RegisterPage = (props) => {
           setLoading(false);
           throw new Error(data.error);
         }
-
         // eslint-disable-next-line react/prop-types
         localStorage.setItem('token', data.token);
+        localStorage.setItem('currency_rates', JSON.stringify(data?.conversion_rates));
         setLoginState({
           isLoggedIn: !!extractUser(data.token),
           user: extractUser(data.token),
+          currency_rates: data?.conversion_rates,
         });
         setLoading(false);
         props.history.push('/dashboard');
@@ -157,15 +161,7 @@ const RegisterPage = (props) => {
     return (
       <div>
         {error && <Error error={error} setError={setError} />}
-        <div>
-          <SVGLoaders.Oval
-            className='absolute transform -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2'
-            width='7.5em'
-            height='9.5em'
-            stroke='#0096FF'
-            strokeWidth='20px'
-          />
-        </div>
+        <Loader />
       </div>
     );
   }
@@ -176,10 +172,25 @@ const RegisterPage = (props) => {
         <div className='container2'>
           <div>
             <Form>
-              <h1>Sign Up</h1>
-              <br></br>
+              <img name='dashboard' id='header-full-logo' src={logo} alt='logo'></img>
+              <hr style={{marginLeft: '10%', marginRight: '10%'}} />
+              <h3>Sign up and start saving</h3>
+              <br/>
+              <GoogleLogin
+                clientId={
+                  '795141151204-qeebg8jipm8oc764kvd1qrmbvndflto9.apps.googleusercontent.com'
+                }
+                buttonText='Sign up with Google'
+                onSuccess={loginWithGoogle}
+                onFailure={loginWithGoogle}
+                cookiePolicy={'single_host_origin'}
+                disabled={false}
+              />
+              <br/>
+              <br/>
+              <p>OR</p>
               <Form.Group controlId='formBasicUsername'>
-                <h4>User Info</h4>
+
                 <div className='input'>
                   <div>
                     <Form.Control
@@ -260,9 +271,9 @@ const RegisterPage = (props) => {
                   </div>
                 </div>
               </Form.Group>
+              <br/>
 
               <Form.Group controlId='formBasicPassword'>
-                <h4>Password</h4>
                 <div className='input'>
                   <div>
                     <Form.Control
@@ -307,7 +318,7 @@ const RegisterPage = (props) => {
 
               <button
                 className='btn btn-primary'
-                style={{marginBottom: '10px'}}
+                style={{ marginBottom: '10px' }}
                 disabled={
                   !usernameControl.valid || !passwordControl.valid || !passwordControlCheck.valid
                 }
@@ -318,19 +329,6 @@ const RegisterPage = (props) => {
                 Sign Up
               </button>
               <br></br>
-              <GoogleLogin
-                clientId={
-                  '795141151204-qeebg8jipm8oc764kvd1qrmbvndflto9.apps.googleusercontent.com'
-                }
-                buttonText='Sign in with Google'
-                onSuccess={loginWithGoogle}
-                onFailure={loginWithGoogle}
-                cookiePolicy={'single_host_origin'}
-                disabled={false}
-                
-              />
-              <br></br>
-
               <p>Already Have an Account?</p>
               <NavLink to='/signin'>
                 <button className='btn btn-dark'>Proceed to Login</button>
