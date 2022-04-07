@@ -64,8 +64,7 @@
 .top-left-navbar-item {
   margin-right: 15px;
   border-radius: 5px;
-  padding-left: 4px;
-  padding-right: 4px;
+
   background-color: rgb(240, 240, 240);
 }
 .top-left-navbar-item-logo {
@@ -81,6 +80,8 @@
 .text-left-navbar-text {
   text-decoration: none;
   color: black;
+  padding-left: 4px;
+  padding-right: 4px;
 }
 
 .text-left-navbar-text-selected {

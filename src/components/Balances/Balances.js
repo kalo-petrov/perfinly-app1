@@ -178,7 +178,7 @@ const Balances = () => {
               labels={balances.map((b) => b.description)}
               height={'375px'}
               width={'355px'}
-              title={`Current Balances Total: ${currency} ${currencyProvider
+              title={`Balances Total: ${currency} ${currencyProvider
                 .sumToMainCurrency(balances)
                 .toLocaleString()}`}
             />
@@ -187,7 +187,7 @@ const Balances = () => {
               labels={balancesByType.map((b) => b.name)}
               height={'375px'}
               width={'355px'}
-              title={`Current Balances By Type: ${currency} ${currencyProvider
+              title={`Balances By Type: ${currency} ${currencyProvider
                 .sumToMainCurrency(balances)
                 .toLocaleString()}`}
             />
@@ -198,7 +198,7 @@ const Balances = () => {
               labels={liabilities.map((b) => b.description)}
               height={'375px'}
               width={'355px'}
-              title={`Current Liabilites Total: ${currency} (${currencyProvider
+              title={`Liabilites Total: ${currency} (${currencyProvider
                 .sumToMainCurrency(liabilities)
                 .toLocaleString()})`}
               backgroundColor={liabilityColors}
@@ -208,7 +208,7 @@ const Balances = () => {
               labels={liabilitiesByType.map((b) => b.name)}
               height={'375px'}
               width={'355px'}
-              title={`Current Liabilites By Type: ${currency} (${currencyProvider
+              title={`Liabilites By Type: ${currency} (${currencyProvider
                 .sumToMainCurrency(liabilities)
                 .toLocaleString()})`}
               backgroundColor={liabilityColors}

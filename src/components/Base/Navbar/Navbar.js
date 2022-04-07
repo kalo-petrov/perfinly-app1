@@ -12,7 +12,8 @@ import useComponentVisible from './../../../hooks/useComponentVisible';
 
 const Navbar = () => {
   const { user, setLoginState } = useContext(AuthContext);
-  const [selectedMenu, setSelectedMenu] = useState('dashboard');
+  const history = useHistory();
+  const [selectedMenu, setSelectedMenu] = useState(history.location.pathname.slice(1,30));
 
   const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
   const {
@@ -25,7 +26,6 @@ const Navbar = () => {
     setSelectedMenu(e.target.name || e.target.id);
   };
 
-  const history = useHistory();
 
   const handleLogOut = (e) => {
     e.preventDefault();
