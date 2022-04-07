@@ -16,6 +16,9 @@ const CreateBalance = ({
   balances,
   types,
   setBalancesByType,
+  liabilities,
+  setLiabilities,
+  setLiabilitiesByType,
 }) => {
   const { user } = useContext(AuthContext);
   const [error, setError] = useState(null);
@@ -62,12 +65,25 @@ const CreateBalance = ({
         if (data.error) {
           setError(data.error);
         } else {
-          setBalances((prev) => [...prev, balanceObject].sort((a, b) => b.amount - a.amount));
+          setBalances((prev) => [...prev, balanceObject].filter((d) => !d.is_liability).sort((a, b) => b.amount - a.amount));
+          setLiabilities((prev) => [...prev, balanceObject].filter((d) => d.is_liability).sort((a, b) => b.amount - a.amount));
 
-          let mapped = new Map();
-          for (const element of [...balances, balanceObject]) {
-            const amount = mapped.get(element.type_id) || 0;
-            mapped.set(
+          let mappedBalances = new Map();
+          let mappedLiabilities = new Map();
+          for (const element of [...balances, balanceObject].filter((d) => !d.is_liability)) {
+            const amount = mappedBalances.get(element.type_id) || 0;
+            mappedBalances.set(
+              element.type_id,
+              amount +
+                currencyProvider.convertToMainCurrency({
+                  amount: element.amount,
+                  currency: element.currency,
+                }).amount
+            );
+          }
+          for (const element of [...liabilities, balanceObject].filter((d) => d.is_liability)) {
+            const amount = mappedLiabilities.get(element.type_id) || 0;
+            mappedLiabilities.set(
               element.type_id,
               amount +
                 currencyProvider.convertToMainCurrency({
@@ -78,8 +94,21 @@ const CreateBalance = ({
           }
 
           setBalancesByType([]);
-          for (const [key, value] of mapped) {
+          for (const [key, value] of mappedBalances) {
             setBalancesByType((prev) =>
+              [
+                ...prev,
+                {
+                  type_id: key,
+                  amount: value,
+                  name: types.find((type) => type._id === key)?.name,
+                },
+              ].sort((a, b) => b.amount - a.amount)
+            );
+          }
+          setLiabilitiesByType([]);
+          for (const [key, value] of mappedLiabilities) {
+            setLiabilitiesByType((prev) =>
               [
                 ...prev,
                 {
