@@ -19,6 +19,8 @@ const Balances = () => {
   const [balancesByType, setBalancesByType] = useState([]);
   const [types, setTypes] = useState([]);
   const [selectedBalance, setSelectedBalance] = useState(false);
+  const [liabilities, setLiabilities] = useState([]);
+  const [liabilitiesByType, setLiabilitiesByType] = useState([]);
 
   const {
     ref: ref1,
@@ -34,7 +36,8 @@ const Balances = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      let mapped = new Map();
+      let mappedBalances = new Map();
+      let mappedLiabilities = new Map();
 
       await httpProvider
         .get(`${BASE_URL}/balances`)
@@ -42,11 +45,27 @@ const Balances = () => {
           if (data.error) {
             setError(data.error.toString());
           } else {
-            setBalances([...data.sort((a, b) => b.amount - a.amount)]);
+            setBalances([
+              ...data.filter((d) => !d.is_liability).sort((a, b) => b.amount - a.amount),
+            ]);
+            setLiabilities([
+              ...data.filter((d) => d.is_liability).sort((a, b) => b.amount - a.amount),
+            ]);
 
-            for (const element of data) {
-              const amount = mapped.get(element.type_id) || 0;
-              mapped.set(
+            for (const element of data.filter((d) => !d.is_liability)) {
+              const amount = mappedBalances.get(element.type_id) || 0;
+              mappedBalances.set(
+                element.type_id,
+                amount +
+                  currencyProvider.convertToMainCurrency({
+                    amount: element.amount,
+                    currency: element.currency,
+                  }).amount
+              );
+            }
+            for (const element of data.filter((d) => d.is_liability)) {
+              const amount = mappedLiabilities.get(element.type_id) || 0;
+              mappedLiabilities.set(
                 element.type_id,
                 amount +
                   currencyProvider.convertToMainCurrency({
@@ -67,8 +86,21 @@ const Balances = () => {
           } else {
             setTypes(data);
             setBalancesByType([]);
-            for (const [key, value] of mapped) {
+            for (const [key, value] of mappedBalances) {
               setBalancesByType((prev) =>
+                [
+                  ...prev,
+                  {
+                    type_id: key,
+                    amount: value,
+                    name: data.find((type) => type._id === key)?.name,
+                  },
+                ].sort((a, b) => b.amount - a.amount)
+              );
+            }
+            setLiabilitiesByType([]);
+            for (const [key, value] of mappedLiabilities) {
+              setLiabilitiesByType((prev) =>
                 [
                   ...prev,
                   {
@@ -128,22 +160,42 @@ const Balances = () => {
         <div>
           <div className='balances-chart-section'>
             <PieChart
-              data={balances.filter((d) => !d.is_liability).map((b) => b.amount.toLocaleString())}
-              labels={balances.filter((d) => !d.is_liability).map((b) => b.description)}
+              data={balances.map((b) => b.amount)}
+              labels={balances.map((b) => b.description)}
               height={'375px'}
               width={'355px'}
-              title={`Current Balances Total: ${currency} ${currencyProvider.sumToMainCurrency(
-                balances.filter((b) => !b.is_liability)
-              ).toLocaleString()}`}
+              title={`Current Balances Total: ${currency} ${currencyProvider
+                .sumToMainCurrency(balances)
+                .toLocaleString()}`}
             />
             <PieChart
-              data={balancesByType.filter((d) => !d.is_liability).map((b) => b.amount)}
-              labels={balancesByType.filter((d) => !d.is_liability).map((b) => b.name)}
-              height={'345px'}
-              width={'325px'}
-              title={`Current Balances By Type:${currency} ${currencyProvider.sumToMainCurrency(
-                balances.filter((b) => !b.is_liability)
-              ).toLocaleString()}`}
+              data={balancesByType.map((b) => b.amount)}
+              labels={balancesByType.map((b) => b.name)}
+              height={'375px'}
+              width={'355px'}
+              title={`Current Balances By Type: ${currency} ${currencyProvider
+                .sumToMainCurrency(balances)
+                .toLocaleString()}`}
+            />
+          </div>
+          <div className='balances-chart-section'>
+            <PieChart
+              data={liabilities.map((b) => b.amount)}
+              labels={liabilities.map((b) => b.description)}
+              height={'375px'}
+              width={'355px'}
+              title={`Current Liabilites Total: ${currency} (${currencyProvider
+                .sumToMainCurrency(liabilities)
+                .toLocaleString()})`}
+            />
+            <PieChart
+              data={liabilitiesByType.map((b) => b.amount)}
+              labels={liabilitiesByType.map((b) => b.name)}
+              height={'375px'}
+              width={'355px'}
+              title={`Current Liabilites By Type: ${currency} (${currencyProvider
+                .sumToMainCurrency(liabilities)
+                .toLocaleString()})`}
             />
           </div>
 
@@ -173,7 +225,22 @@ const Balances = () => {
                                 }
                               >
                                 {balance.description} - {balance.currency}{' '}
-                                {balance.is_liability ? `(${balance.amount.toLocaleString()})` : balance.amount.toLocaleString()}
+                                {balance.amount.toLocaleString()}
+                              </div>
+                            );
+                          } else {
+                            return <span key={i}></span>;
+                          }
+                        })}
+                        {liabilities?.map((l, i) => {
+                          if (l.type_id === type._id) {
+                            return (
+                              <div
+                                key={l._id}
+                                className='individual-balance'
+                                onClick={() => setSelectedBalance(l) + setToggleEditBalance(true)}
+                              >
+                                {l.description} - {l.currency} ({l.amount.toLocaleString()})
                               </div>
                             );
                           } else {
@@ -183,8 +250,13 @@ const Balances = () => {
                       </th>
                       <th>
                         {currency}{' '}
-                        {currencyProvider.sumToMainCurrency(
-                          balances.filter((b) => b.type_id === type._id)
+                        {(
+                          currencyProvider.sumToMainCurrency(
+                            balances.filter((b) => b.type_id === type._id)
+                          ) -
+                          currencyProvider.sumToMainCurrency(
+                            liabilities.filter((b) => b.type_id === type._id)
+                          )
                         ).toLocaleString()}{' '}
                       </th>
                     </tr>
@@ -194,7 +266,10 @@ const Balances = () => {
                   <th colSpan={2}>Totals</th>
                   <th>
                     {currency}{' '}
-                    {currencyProvider.sumToMainCurrency(balances.filter((b) => !b.is_liability)).toLocaleString()}
+                    {(
+                      currencyProvider.sumToMainCurrency(balances) -
+                      currencyProvider.sumToMainCurrency(liabilities)
+                    ).toLocaleString()}
                   </th>
                 </tr>
               </tbody>
