@@ -209,7 +209,7 @@ const AllExpenses = ({
               return (
                 <tr key={record._id}>
                   <td>{record.description}</td>
-                  <td>{record.amount}</td>
+                  <td>{record.amount.toLocaleString()}</td>
                   <td>{record.currency}</td>
                   <td>{(record.date).slice(0,10)}</td>
                   <td>{categories.find((c) => c._id === record.category_id)?.name}</td>
@@ -226,7 +226,7 @@ const AllExpenses = ({
             })}
             <tr style={{fontWeight: '700'}}>
               <td>Total</td>
-              <td>{currencyProvider.sumToMainCurrency(thisMonthSpendRecords)}</td>
+              <td>{currencyProvider.sumToMainCurrency(thisMonthSpendRecords).toLocaleString()}</td>
               <td>{currency}</td>
 
             </tr>

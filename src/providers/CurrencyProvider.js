@@ -4,13 +4,13 @@ export const getCurrencyRates = () => JSON.parse(localStorage.getItem('currency_
 export const getMainCurrency = () => extractUser(localStorage.getItem('token'))?.currency || '';
 
 const sumToMainCurrency = (arrayOfAmountsWithCurrencies = [{ amount: 0, currency: 'USD' }]) => {
-  return arrayOfAmountsWithCurrencies
+  return Number(arrayOfAmountsWithCurrencies
     .reduce((acc, obj) => {
       acc += (obj.amount * 1) / getCurrencyRates()[`${obj.currency}`];
 
       return acc;
     }, 0)
-    .toFixed(2);
+    .toFixed(2));
 };
 
 const convertToMainCurrency = (amountObject = { amount: 0, currency: 'USD' }) => {

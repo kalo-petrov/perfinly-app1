@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getAllSpendRecords } from '../../actions';
 import currencyProvider from '../../providers/CurrencyProvider';
 import AuthContext from '../../context/AuthContext';
-import getSymbolFromCurrency from 'currency-symbol-map'
+import getSymbolFromCurrency from 'currency-symbol-map';
 
 const WeekMonthTable = ({
   confirmedFromDate,
@@ -125,14 +125,18 @@ const WeekMonthTable = ({
                         {' '}
                         {d.weekStart} - {d.weekEnd}
                       </th>
-                      <th> 
-                        {currencyProvider.sumToMainCurrency(
-                          allSpendRecords.filter(
-                            (sp) =>
-                            sp.date.slice(0,10) >= d.weekStart.slice(0,10) &&
-                            sp.date.slice(0,10) <= d.weekEnd.slice(0,10)
+                      <th>
+                        {' '}
+                        {getSymbolFromCurrency(currency)}{' '}
+                        {currencyProvider
+                          .sumToMainCurrency(
+                            allSpendRecords.filter(
+                              (sp) =>
+                                sp.date.slice(0, 10) >= d.weekStart.slice(0, 10) &&
+                                sp.date.slice(0, 10) <= d.weekEnd.slice(0, 10)
+                            )
                           )
-                        )} {getSymbolFromCurrency(currency)}
+                          .toLocaleString()}
                       </th>
                     </tr>
                   );
@@ -142,13 +146,17 @@ const WeekMonthTable = ({
                     <tr key={d}>
                       <th> {d}</th>
                       <th>
-                        {currencyProvider.sumToMainCurrency(
-                          allSpendRecords.filter(
-                            (sp) =>
-                            sp.date.slice(0,10) >= d.slice(0,10) &&
-                            sp.date.slice(0,10) <= moment(d).endOf('month').format('yyyy-MM-DD')
-                             )
-                        )}
+                        {getSymbolFromCurrency(currency)}{' '}
+                        {currencyProvider
+                          .sumToMainCurrency(
+                            allSpendRecords.filter(
+                              (sp) =>
+                                sp.date.slice(0, 10) >= d.slice(0, 10) &&
+                                sp.date.slice(0, 10) <=
+                                  moment(d).endOf('month').format('yyyy-MM-DD')
+                            )
+                          )
+                          .toLocaleString()}
                       </th>
                     </tr>
                   );
@@ -156,7 +164,8 @@ const WeekMonthTable = ({
             <tr>
               <th> Total On Page</th>
               <th>
-                {currencyProvider.sumToMainCurrency(thisMonthSpendRecords)} {getSymbolFromCurrency(currency)}
+                {getSymbolFromCurrency(currency)}{' '}
+                {currencyProvider.sumToMainCurrency(thisMonthSpendRecords).toLocaleString()}
               </th>
             </tr>
           </tbody>

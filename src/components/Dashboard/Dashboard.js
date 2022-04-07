@@ -174,7 +174,7 @@ function Dashboard() {
         })
         .catch((error) => setError(error.toString()));
 
-       setLoading(false)
+      setLoading(false);
     };
 
     fetchData();
@@ -227,7 +227,7 @@ function Dashboard() {
                 width={'325px'}
                 title={`Spend By Category This Month: Total:  ${currency} ${currencyProvider.sumToMainCurrency(
                   allSpendRecords
-                )}`}
+                ).toLocaleString()}`}
               />
             ) : (
               <div className='no-info-text'>
@@ -259,9 +259,9 @@ function Dashboard() {
                 labels={balancesByType.map((b) => `${b.name} (${getSymbolFromCurrency(currency)})`)}
                 height={'345px'}
                 width={'325px'}
-                title={`Current Balances Total: ${currency} ${currencyProvider.sumToMainCurrency(
-                  balances
-                )}`}
+                title={`Current Balances Total: ${currency} ${currencyProvider
+                  .sumToMainCurrency(balances)
+                  .toLocaleString()}`}
               />
             ) : (
               <div className='no-info-text'>

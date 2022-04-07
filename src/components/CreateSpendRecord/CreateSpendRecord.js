@@ -183,9 +183,10 @@ const CreateSpendRecord = ({
             {/* <Form.Label>Amount</Form.Label> */}
             <Form.Control
               name='Amount'
-              type='numb er'
+              type='number'
               className={verificationMessage.includes('amount') ? 'unverified-input' : 'ok'}
               placeholder='add the amount'
+              value={amount}
               onChange={(e) => setAmount(e.target.value)}
               onBlur={() => amount === 1 && setAmount(0)}
             />

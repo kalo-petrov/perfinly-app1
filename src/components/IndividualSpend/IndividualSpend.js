@@ -11,7 +11,7 @@ const IndividualSpend = ({ spendRecord, keys, setToggleEdit, setSelectedSpend })
         onClick={() => setToggleEdit((prev) => !prev)}
       >
         {' '}
-        {`${spendRecord?.description}: ${getSymbolFromCurrency(spendRecord.currency)}${spendRecord.amount}`}
+        {`${spendRecord?.description}: ${getSymbolFromCurrency(spendRecord.currency)}${spendRecord.amount.toLocaleString()}`}
       </div>
     </div>
   );

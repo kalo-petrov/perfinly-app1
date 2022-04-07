@@ -128,13 +128,13 @@ const Balances = () => {
         <div>
           <div className='balances-chart-section'>
             <PieChart
-              data={balances.filter((d) => !d.is_liability).map((b) => b.amount)}
+              data={balances.filter((d) => !d.is_liability).map((b) => b.amount.toLocaleString())}
               labels={balances.filter((d) => !d.is_liability).map((b) => b.description)}
               height={'375px'}
               width={'355px'}
               title={`Current Balances Total: ${currency} ${currencyProvider.sumToMainCurrency(
                 balances.filter((b) => !b.is_liability)
-              )}`}
+              ).toLocaleString()}`}
             />
             <PieChart
               data={balancesByType.filter((d) => !d.is_liability).map((b) => b.amount)}
@@ -143,7 +143,7 @@ const Balances = () => {
               width={'325px'}
               title={`Current Balances By Type:${currency} ${currencyProvider.sumToMainCurrency(
                 balances.filter((b) => !b.is_liability)
-              )}`}
+              ).toLocaleString()}`}
             />
           </div>
 
@@ -173,7 +173,7 @@ const Balances = () => {
                                 }
                               >
                                 {balance.description} - {balance.currency}{' '}
-                                {balance.is_liability ? `(${balance.amount})` : balance.amount}
+                                {balance.is_liability ? `(${balance.amount.toLocaleString()})` : balance.amount.toLocaleString()}
                               </div>
                             );
                           } else {
@@ -185,7 +185,7 @@ const Balances = () => {
                         {currency}{' '}
                         {currencyProvider.sumToMainCurrency(
                           balances.filter((b) => b.type_id === type._id)
-                        )}{' '}
+                        ).toLocaleString()}{' '}
                       </th>
                     </tr>
                   );
@@ -194,7 +194,7 @@ const Balances = () => {
                   <th colSpan={2}>Totals</th>
                   <th>
                     {currency}{' '}
-                    {currencyProvider.sumToMainCurrency(balances.filter((b) => !b.is_liability))}
+                    {currencyProvider.sumToMainCurrency(balances.filter((b) => !b.is_liability)).toLocaleString()}
                   </th>
                 </tr>
               </tbody>
