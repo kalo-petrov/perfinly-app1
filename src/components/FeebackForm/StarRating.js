@@ -7,7 +7,7 @@ const StarRating = ({rating, setRating}) => {
 
   return (
     <div className='star-rating'>
-      {[...Array(10)].map((star, index) => {
+      {[...Array(5)].map((star, index) => {
         index += 1;
         return (
           <FeatherIcon

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './FeedbackForm.css';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -6,12 +6,21 @@ import StarRating from './StarRating';
 import httpProvider from './../../providers/httpProvider';
 import { BASE_URL } from './../../common/constants';
 import Loader from '../Base/Loader/Loader';
+import { useHistory } from 'react-router-dom';
+import AuthContext from '../../context/AuthContext';
 
-const FeedbackForm = () => {
+const FeedbackForm = (props) => {
   const [existingFeedback, setExistingFeedback] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [title, setTitle] = React.useState('');
-  const [rating, setRating] = React.useState(0);
+  const [rating, setRating] = React.useState(1);
+  const [usage, setUsage] = React.useState(1);
+  const [financialHabits, setFinancialHabits] = React.useState(1);
+  const [intuitiveUse, setIntuitiveUse] = React.useState(1);
+  const [careAboutDesign, setCareAboutDesign] = React.useState(1);
+  const [design, setDesign] = React.useState(1);
+  const [recommend, setRecommend] = React.useState(1);
+
   const [feedback1, setFeedback1] = React.useState('');
   const [feedback2, setFeedback2] = React.useState('');
   const [feedback3, setFeedback3] = React.useState('');
@@ -20,56 +29,61 @@ const FeedbackForm = () => {
   React.useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      httpProvider.get(`${BASE_URL}/feedback`).then((data) => {
+      await httpProvider.get(`${BASE_URL}/feedback`).then((data) => {
         if (data.error) {
           setLoading(false);
           return;
         } else {
           setExistingFeedback(true);
-          setTitle(data.title);
-          setRating(data.rating);
-          setFeedback1(data.feedback[0]);
-          setFeedback2(data.feedback[1]);
-          setFeedback3(data.feedback[2]);
-          setFeedback4(data.feedback[3]);
         }
         setLoading(false);
       });
-
     };
     fetchData();
   }, []);
 
-  const handleSubmit = (e) => {
+  const { user } = useContext(AuthContext);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const feedbackObject = {
       title,
       rating,
+      usage,
+      financialHabits,
+      intuitiveUse,
+      careAboutDesign,
+      design,
+      recommend,
       feedback: [feedback1, feedback2, feedback3, feedback4],
+      username: user.username,
+      email: user.email,
     };
 
-    existingFeedback
-      ? httpProvider
-          .put(`${BASE_URL}/feedback`, feedbackObject)
-          .then((data) => console.log(data))
-          .catch((e) => console.error(e))
-      : httpProvider
-          .post(`${BASE_URL}/feedback`, feedbackObject)
-          .then((data) => console.log(data))
-          .catch((e) => console.error(e));
+    await httpProvider
+      .post(`${BASE_URL}/feedback`, feedbackObject)
+      .then((data) => alert(`Thank your for your feedback!`) + props.history.push('/dashboard'))
+      .catch((e) => console.error(e));
+
+    setLoading(false);
   };
 
-  
   if (loading) {
-    return (
-      <Loader/>
-    );
+    return <Loader />;
   }
 
+  if (existingFeedback) {
+    return (
+      <div>
+        <h4>You have already given us Feedback! Thank you! We Appreciate your time and effort!</h4>
+      </div>
+    );
+  }
   return (
     <div>
-      <h3>{existingFeedback ? 'Edit Your Feedback' : 'Give us Feeback'}</h3>
+      <h4>Thanks for using Perfinly! We would love to hear from you</h4>
       <div className='feedback-form-container'>
         <Form>
           <Form.Group className='mb-3'>
@@ -81,16 +95,78 @@ const FeedbackForm = () => {
               onChange={(e) => setTitle(e.target.value)}
             />
           </Form.Group>
+          <hr />
 
+          <h6>
+            Please rate the following aspects of the app with 5 Stars to agree and 1 to disagree
+          </h6>
+          <br />
           <Form.Group className='mb-3'>
             <Form.Label>
-              <div> Rating: {rating}/10 </div>
+              <div> Overall I enjoy using the application: ({rating}/5) </div>
               <div>
                 <StarRating rating={rating} setRating={setRating} />
               </div>
             </Form.Label>
           </Form.Group>
 
+          <Form.Group className='mb-3'>
+            <Form.Label>
+              <div> I would use such an app often ({usage}/5) </div>
+              <div>
+                <StarRating rating={usage} setRating={setUsage} />
+              </div>
+            </Form.Label>
+          </Form.Group>
+
+          <Form.Group className='mb-3'>
+            <Form.Label>
+              <div>
+                {' '}
+                Such an app would help me improve my financial habits ({financialHabits}/5){' '}
+              </div>
+              <div>
+                <StarRating rating={financialHabits} setRating={setFinancialHabits} />
+              </div>
+            </Form.Label>
+          </Form.Group>
+
+          <Form.Group className='mb-3'>
+            <Form.Label>
+              <div> I find this app easy and intuitive to use ({intuitiveUse}/5) </div>
+              <div>
+                <StarRating rating={intuitiveUse} setRating={setIntuitiveUse} />
+              </div>
+            </Form.Label>
+          </Form.Group>
+
+          <Form.Group className='mb-3'>
+            <Form.Label>
+              <div> I care about the design of this app ({careAboutDesign}/5 )</div>
+              <div>
+                <StarRating rating={careAboutDesign} setRating={setCareAboutDesign} />
+              </div>
+            </Form.Label>
+          </Form.Group>
+
+          <Form.Group className='mb-3'>
+            <Form.Label>
+              <div> I like the design of this app ({design}/5) </div>
+              <div>
+                <StarRating rating={design} setRating={setDesign} />
+              </div>
+            </Form.Label>
+          </Form.Group>
+          <Form.Group className='mb-3'>
+            <Form.Label>
+              <div> I would recommend this app to a friend ({recommend}/5) </div>
+              <div>
+                <StarRating rating={recommend} setRating={setRecommend} />
+              </div>
+            </Form.Label>
+          </Form.Group>
+
+          <hr />
           <Form.Group className='mb-3'>
             <Form.Label>General Feeback</Form.Label>
             <Form.Control
