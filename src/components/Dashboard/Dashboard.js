@@ -25,6 +25,8 @@ function Dashboard() {
   const [balancesByType, setBalancesByType] = useState([]);
   const [balances, setBalances] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [liabilities, setLiabilities] = useState([]);
+  const [liabilitiesByType, setLiabilitiesByType] = useState([]);
 
   const currency = useContext(AuthContext).user.currency;
 
@@ -131,12 +133,29 @@ function Dashboard() {
           if (data.error) {
             setError(data.error.toString());
           } else {
-            setBalances(data);
-            const mapped = new Map();
+            const mappedBalances = new Map();
+            const mappedLiabilities = new Map();
+            setBalances([
+              ...data.filter((d) => !d.is_liability).sort((a, b) => b.amount - a.amount),
+            ]);
+            setLiabilities([
+              ...data.filter((d) => d.is_liability).sort((a, b) => b.amount - a.amount),
+            ]);
 
-            for (const element of data) {
-              const amount = mapped.get(element.type_id) || 0;
-              mapped.set(
+            for (const element of data.filter((d) => !d.is_liability)) {
+              const amount = mappedBalances.get(element.type_id) || 0;
+              mappedBalances.set(
+                element.type_id,
+                amount +
+                  currencyProvider.convertToMainCurrency({
+                    amount: element.amount,
+                    currency: element.currency,
+                  }).amount
+              );
+            }
+            for (const element of data.filter((d) => d.is_liability)) {
+              const amount = mappedLiabilities.get(element.type_id) || 0;
+              mappedLiabilities.set(
                 element.type_id,
                 amount +
                   currencyProvider.convertToMainCurrency({
@@ -154,7 +173,7 @@ function Dashboard() {
                     setError(balance_types.error.toString());
                   } else {
                     setBalancesByType([]);
-                    for (const [key, value] of mapped) {
+                    for (const [key, value] of mappedBalances) {
                       setBalancesByType((prev) => [
                         ...prev,
                         {
@@ -163,6 +182,19 @@ function Dashboard() {
                           name: balance_types.find((type) => type._id === key)?.name,
                         },
                       ]);
+                    }
+                    setLiabilitiesByType([]);
+                    for (const [key, value] of mappedLiabilities) {
+                      setLiabilitiesByType((prev) =>
+                        [
+                          ...prev,
+                          {
+                            type_id: key,
+                            amount: value,
+                            name: data.find((type) => type._id === key)?.name,
+                          },
+                        ].sort((a, b) => b.amount - a.amount)
+                      );
                     }
                   }
                 })
@@ -191,6 +223,18 @@ function Dashboard() {
     isComponentVisible: toggleAddBalance,
     setIsComponentVisible: setToggleAddBalance,
   } = useComponentVisible(false);
+
+  const liabilityColors = [
+    '#ff5050',
+    '#FFBF00',
+    '#CCCCFF',
+    '#6495ED',
+    '#9FE2BF',
+    '#DFFF00',
+    '#990033',
+    '#6666ff',
+    '#0000b3',
+  ];
 
   if (loading) {
     return <Loader />;
@@ -225,9 +269,9 @@ function Dashboard() {
                 )}
                 height={'345px'}
                 width={'325px'}
-                title={`Spend By Category This Month: Total:  ${currency} ${currencyProvider.sumToMainCurrency(
-                  allSpendRecords
-                ).toLocaleString()}`}
+                title={`Spend By Category This Month: Total:  ${currency} ${currencyProvider
+                  .sumToMainCurrency(allSpendRecords)
+                  .toLocaleString()}`}
               />
             ) : (
               <div className='no-info-text'>
@@ -273,6 +317,25 @@ function Dashboard() {
                 <br />
                 <br />
               </div>
+            )}
+          </div>
+        </div>
+        <div className='total-spend-dashboard'>
+          {' '}
+          <div className='total-spend-dashboard-item'>
+            {liabilitiesByType.length > 0 ? (
+              <PieChart
+                data={liabilitiesByType.map((b) => b.amount)}
+                labels={liabilitiesByType.map((b) => b.name)}
+                height={'375px'}
+                width={'355px'}
+                title={`Current Liabilites By Type: ${currency} (${currencyProvider
+                  .sumToMainCurrency(liabilities)
+                  .toLocaleString()})`}
+                backgroundColor={liabilityColors}
+              />
+            ) : (
+              <></>
             )}
           </div>
         </div>
