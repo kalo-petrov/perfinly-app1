@@ -123,6 +123,17 @@ const Balances = () => {
 
   const currency = useContext(AuthContext).user.currency;
 
+  const liabilityColors = [
+    '#ff5050',
+    '#FFBF00',
+    '#CCCCFF',
+    '#6495ED',
+    '#9FE2BF',
+    '#DFFF00',
+    '#990033',
+    '#6666ff',
+    '#0000b3',
+  ]
   return (
     <div>
       {error && <Error error={error} setError={setError} />}
@@ -187,6 +198,7 @@ const Balances = () => {
               title={`Current Liabilites Total: ${currency} (${currencyProvider
                 .sumToMainCurrency(liabilities)
                 .toLocaleString()})`}
+              backgroundColor={liabilityColors}
             />
             <PieChart
               data={liabilitiesByType.map((b) => b.amount)}
@@ -196,6 +208,7 @@ const Balances = () => {
               title={`Current Liabilites By Type: ${currency} (${currencyProvider
                 .sumToMainCurrency(liabilities)
                 .toLocaleString()})`}
+              backgroundColor={liabilityColors}
             />
           </div>
 
