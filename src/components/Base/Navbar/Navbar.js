@@ -35,6 +35,8 @@ const Navbar = () => {
     history.push('/login');
   };
 
+ 
+
   return (
     <div className='navbar-container'>
       <div className='top-left-navbar'>
@@ -130,7 +132,7 @@ const Navbar = () => {
             }
             referrerPolicy='no-referrer'
             alt={user.username}
-            onClick={() => setIsComponentVisible((prev) => !prev)}
+            onClick={(e) => setIsComponentVisible((prev) => !prev)}
           />
           {isComponentVisible && (
             <div className='user-info-container' ref={ref}>
@@ -138,7 +140,7 @@ const Navbar = () => {
                 <Link
                   to='/edit-profile'
                   style={{ textDecoration: 'none', color: 'black' }}
-                  onClick={() => setIsComponentVisible(false)}
+                  onClick={(e) => changeMenu(e) + setIsComponentVisible(false)}
                 >
                   {user.username}
                 </Link>
@@ -147,7 +149,7 @@ const Navbar = () => {
                 <Link
                   to='/edit-profile'
                   style={{ textDecoration: 'none', color: 'black' }}
-                  onClick={() => setIsComponentVisible(false)}
+                  onClick={(e) => changeMenu(e) + setIsComponentVisible(false)}
                 >
                   Edit Profile
                 </Link>
@@ -157,14 +159,14 @@ const Navbar = () => {
                   to='/feedback'
                   name='feedback'
                   style={{ textDecoration: 'none', color: 'black' }}
-                  onClick={() => setIsComponentVisible(false)}
+                  onClick={(e) =>  changeMenu(e) + setIsComponentVisible(false)}
                 >
                   Give us Feedback
                 </Link>
               </div>
               <div
                 className='user-info-item-action'
-                onClick={(e) => handleLogOut(e)}
+                onClick={(e) =>  handleLogOut(e)}
                 style={{ cursor: 'pointer' }}
               >
                 Logout

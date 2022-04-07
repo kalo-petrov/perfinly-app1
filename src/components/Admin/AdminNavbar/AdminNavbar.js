@@ -1,17 +1,15 @@
-import React, {useContext, useState} from 'react'
-import './AdminNavbar.css'
+import React, { useContext, useState } from 'react';
+import './AdminNavbar.css';
 import AuthContext from '../../../context/AuthContext';
 import httpProvider from './../../../providers/httpProvider';
 import { Link, useHistory } from 'react-router-dom';
 import { BASE_URL } from './../../../common/constants';
 import logo from '../../../assets/FullNameLogo-vec.png';
-
+import useComponentVisible from '../../../hooks/useComponentVisible';
 
 const AdminNavbar = () => {
-    const { user, setLoginState } = useContext(AuthContext);
-    const [toggleUserInfo, setToggleUserInfo] = useState(false);
-   
-    
+  const { user, setLoginState } = useContext(AuthContext);
+
   const history = useHistory();
 
   const handleLogOut = (e) => {
@@ -22,9 +20,10 @@ const AdminNavbar = () => {
     history.push('/login');
   };
 
+  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
 
   return (
-    <div className='navbar-container-admin'>
+    <div className='navbar-container'>
       <div className='top-left-navbar-admin'>
         <div className='top-left-navbar-item'>
           <Link to='/dashboard'>
@@ -41,12 +40,8 @@ const AdminNavbar = () => {
             Users
           </Link>
         </div>
-
-
       </div>
       <div className='top-right-navbar-admin'>
-
-
         <div className='top-right-navbar-item'>
           <img
             className='user-profilepic'
@@ -56,14 +51,11 @@ const AdminNavbar = () => {
             }
             referrerPolicy='no-referrer'
             alt={user.username}
-            onClick={() => setToggleUserInfo((prev) => !prev)}
+            onClick={() => setIsComponentVisible((prev) => !prev)}
           />
-          {toggleUserInfo && (
-            <div className='user-info-container'>
+          {isComponentVisible && (
+            <div className='user-info-container' ref={ref}>
               <div className='user-info-item'>{user.username}</div>
-              <div className='user-info-item'>{user.email}</div>
-              <div className='user-info-item'>{user.first_name}</div>
-              <div className='user-info-item'>{user.last_name}</div>
               <div
                 className='user-info-item'
                 onClick={(e) => handleLogOut(e)}
@@ -76,7 +68,7 @@ const AdminNavbar = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AdminNavbar
+export default AdminNavbar;

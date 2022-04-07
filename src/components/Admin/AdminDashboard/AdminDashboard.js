@@ -83,27 +83,31 @@ const AdminDashboard = () => {
         </div>
         <div className='latest-rating-container'>
           <table>
-            <tr>
-              <th onClick={() => requestSort('username')}>User</th>
-              <th onClick={() => requestSort('rating')}>Rating</th>
-              <th onClick={() => requestSort('date_created')}>Date</th>
-            </tr>
+            <thead>
+              <tr>
+                <th onClick={() => requestSort('username')}>User</th>
+                <th onClick={() => requestSort('rating')}>Rating</th>
+                <th onClick={() => requestSort('date_created')}>Date</th>
+              </tr>
+            </thead>
             <tbody>
               {items?.map((f) => {
                 return (
                   <tr className='dashboard-feedback-item' key={f._id}>
                     <td>{f.username}</td>
                     <td>{f.rating}</td>
-                    <td>{f.date_created.slice(0,10)}</td>
+                    <td>{f.date_created.slice(0, 10)}</td>
                   </tr>
                 );
               })}
               <tr>
                 <th>Average</th>
-                <th>{feedback.reduce((acc, f) => {
-                  acc += f.rating
-                  return acc;
-                }, 0)/feedback.length}</th>
+                <th>
+                  {feedback.reduce((acc, f) => {
+                    acc += f.rating;
+                    return acc;
+                  }, 0) / feedback.length || ''}
+                </th>
               </tr>
             </tbody>
           </table>{' '}

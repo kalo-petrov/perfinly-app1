@@ -1,91 +1,91 @@
-.navbar-container-admin {
-    z-index: 5;
-    top: 0;
-    width: 100%;
-    border-bottom: 1px solid rgb(50, 50, 50);
-    background-color: rgb(255, 255, 255);
-    margin-bottom: 10px;
-  
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: stretch;
-    /* align-content: space-around;  */
-    padding-left: 5px;
-    border: 1px solid red;
-  }
-  
-  #header-full-logo {
-    width: 110px;
-    height: 48.53px;
-    margin-top: 5px;
-  }
-  
-  #header-full-logo:hover {
-    width: 115px;
-    height: 50.18px;
-    margin-top: 3.35px;
-  }
-  
-  .top-left-navbar-admin {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: center;
-  }
-  
-  .top-right-navbar-admin {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: center;
-    align-content: space-around;
-  }
-  
-  .top-left-navbar-item {
-    margin-right: 15px;
-  
-  }
-  
-  .text-left-navbar-text {
-    text-decoration: none;
-    color: black;
-  }
-  
-  .text-left-navbar-text:hover {
-    color: black;
-    font-size: large;
-    padding: 1px;
-    border-radius: 2px;
-  }
-  
-  
-  .top-right-navbar-item {
-    margin-right: 15px;
-  }
-  
-  .user-info-container {
-    z-index: 5;
-    background-color: rgb(243, 247, 250);
-    border: 1px solid black;
-    text-align: left;
-    position: absolute;
-    top: 50px;
-    right: 5px
-  }
-  
-  .user-info-item {
-    border-bottom: 0.5px solid grey;
-    padding-bottom: 10px;
-    padding-left: 4px;
-  }
-  
-  .user-profilepic {
-    height: 40px;
-    width: 40px;
-    border-radius: 20px;
-  }
-  
+.navbar-container {
+  z-index: 5;
+  top: 0;
+  width: 100%;
+  border-bottom: 1px solid rgb(50, 50, 50);
+  background-color: rgb(255, 255, 255);
+  margin-bottom: 10px;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: stretch;
+
+  padding-left: 5px;
+}
+
+#header-full-logo {
+  width: 110px;
+  height: 48.53px;
+  margin-top: 5px;
+}
+
+#header-full-logo:hover {
+  width: 115px;
+  height: 50.18px;
+  margin-top: 3.35px;
+}
+
+.top-left-navbar-admin {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: baseline;
+  align-content: baseline;
+  text-align: left !important;
+}
+
+.top-right-navbar-admin {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: space-around; 
+}
+
+.top-left-navbar-item {
+  margin-right: 15px;
+
+}
+
+.text-left-navbar-text {
+  text-decoration: none;
+  color: black;
+}
+
+.text-left-navbar-text:hover {
+  color: black;
+  font-size: large;
+  padding: 1px;
+  border-radius: 2px;
+}
+
+
+.top-right-navbar-item {
+  margin-right: 15px;
+}
+
+.user-info-container {
+  z-index: 5;
+  background-color: rgb(243, 247, 250);
+  border: 1px solid black;
+  text-align: left;
+  position: absolute;
+  top: 50px;
+  right: 5px
+}
+
+.user-info-item {
+  border-bottom: 0.5px solid grey;
+  padding-bottom: 10px;
+  padding-left: 4px;
+}
+
+.user-profilepic {
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+}

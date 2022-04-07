@@ -8,19 +8,16 @@ import useSortableData from '../../../hooks/useSortableData';
 const Users = () => {
   const [activeUsers, setActiveUsers] = React.useState([]);
 
-
   React.useEffect(() => {
     const fetchData = async () => {
       await httpProvider.get(`${BASE_URL}/auth/users`).then((data) => {
         if (data.error) {
           return;
         }
-        console.log(data);
         setActiveUsers(data.users);
 
       });
     };
-
     fetchData();
   }, []);
 
@@ -31,7 +28,7 @@ const Users = () => {
   return (
     <div>
       <h3>Users</h3>
-
+    <h4>Total: {activeUsers.length}</h4>
       <div>
         <table>
           <thead>
@@ -54,7 +51,7 @@ const Users = () => {
                   <td>{au.first_name}</td>
                   <td>{au.last_name}</td>
                   <td>{au.role}</td>
-                  <td>{au.last_login && moment(au.last_login).format('h:mm:ss DD-MMM-YYYY')}</td>
+                  <td>{au.last_login && moment(au.last_login).format('h:mm:ss (DD-MMM-YYYY)')}</td>
                   <td></td>
                 </tr>
               ) 

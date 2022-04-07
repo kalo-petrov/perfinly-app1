@@ -14,7 +14,6 @@ const AllFeedback = () => {
         if (data.error) {
           return;
         }
-        console.log(data);
         setFeedback(data);
       });
     };
@@ -76,43 +75,43 @@ const AllFeedback = () => {
                 {feedback.reduce((acc, f) => {
                   acc += f.rating;
                   return acc;
-                }, 0) / feedback.length}
+                }, 0) / feedback.length || ''}
               </th>
               <th>
                 {feedback.reduce((acc, f) => {
                   acc += f.usage || 0;
                   return acc;
-                }, 0) / feedback.length}
+                }, 0) / feedback.length || ''}
               </th>
               <th>
                 {feedback.reduce((acc, f) => {
                   acc += f.financialHabits || 0;
                   return acc;
-                }, 0) / feedback.length}
+                }, 0) / feedback.length || ''}
               </th>
               <th>
                 {feedback.reduce((acc, f) => {
                   acc += f.intuitiveUse || 0;
                   return acc;
-                }, 0) / feedback.length}
+                }, 0) / feedback.length || ''}
               </th>
               <th>
                 {feedback.reduce((acc, f) => {
                   acc += f.careAboutDesign || 0;
                   return acc;
-                }, 0) / feedback.length}
+                }, 0) / feedback.length || ''}
               </th>
               <th>
                 {feedback.reduce((acc, f) => {
                   acc += f.design || 0;
                   return acc;
-                }, 0) / feedback.length}
+                }, 0) / feedback.length || ''}
               </th>
               <th>
                 {feedback.reduce((acc, f) => {
                   acc += f.recommend || 0;
                   return acc;
-                }, 0) / feedback.length}
+                }, 0) / feedback.length || ''}
               </th>
             </tr>
           </tbody>
