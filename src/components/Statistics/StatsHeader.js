@@ -103,7 +103,7 @@ const StatsHeader = ({
   };
   const last6Months = () => {
     setFromDate(new Date(moment().subtract(5, 'month').startOf('month')));
-    setToDate(new Date(moment().subtract(1, 'month').endOf('month')));
+    setToDate(new Date(moment().endOf('month')));
   };
 
   return (

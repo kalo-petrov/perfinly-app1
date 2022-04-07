@@ -191,7 +191,7 @@ function Dashboard() {
                           {
                             type_id: key,
                             amount: value,
-                            name: data.find((type) => type._id === key)?.name,
+                            name: balance_types.find((type) => type._id === key)?.name,
                           },
                         ].sort((a, b) => b.amount - a.amount)
                       );
@@ -325,8 +325,8 @@ function Dashboard() {
           <div className='total-spend-dashboard-item'>
             {liabilitiesByType.length > 0 ? (
               <PieChart
-                data={liabilitiesByType.map((b) => b.amount)}
-                labels={liabilitiesByType.map((b) => b.name)}
+                data={liabilitiesByType.map((l) => l.amount)}
+                labels={liabilitiesByType.map((l) => `${l.name} (${getSymbolFromCurrency(currency)})`)}
                 height={'375px'}
                 width={'355px'}
                 title={`Current Liabilites By Type: ${currency} (${currencyProvider
