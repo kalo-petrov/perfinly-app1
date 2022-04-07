@@ -192,7 +192,7 @@ const EditBalance = ({
             />
           </Form.Group>
         </div>
-        <div>{!description && <small>Description is required</small>}</div>
+        {/* <div>{!description && <small>Description is required</small>}</div> */}
         <div className='editable-balance-item'>
           <Form.Group>
             {/* <Form.Label>Amount</Form.Label> */}
@@ -207,7 +207,7 @@ const EditBalance = ({
             />
           </Form.Group>
         </div>
-        <div>{!amount && <small>Description is required</small>}</div>
+        {/* <div>{!amount && <small>Description is required</small>}</div> */}
 
         <div className='editable-balance-item'>
           <div className='edit-balance-checkbox'>

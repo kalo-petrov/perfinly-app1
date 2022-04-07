@@ -121,7 +121,7 @@ const CreateBalance = ({
             />
           </Form.Group>
         </div>
-        <div>{!description && <small>Description is required</small>}</div>
+        {/* <div>{!description && <small>Description is required</small>}</div> */}
         <div className='create-balance-input-item'>
           <Form.Group>
             {/* <Form.Label>Amount</Form.Label> */}
@@ -135,7 +135,7 @@ const CreateBalance = ({
             />
           </Form.Group>
         </div>
-        <div>{!amount && <small>Amount is required</small>}</div>
+        {/* <div>{!amount && <small>Amount is required</small>}</div> */}
         <div className='create-balance-input-item'>
           <div className='create-balance-checkbox'>
             <Form.Check
