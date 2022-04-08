@@ -20,6 +20,10 @@ const FeedbackForm = (props) => {
   const [careAboutDesign, setCareAboutDesign] = React.useState(1);
   const [design, setDesign] = React.useState(1);
   const [recommend, setRecommend] = React.useState(1);
+  const [keepTrackofFinance, setKeepTrackofFinance] = React.useState(null);
+  const [trackWithApp, setTrackWithApp] = React.useState(null);
+  const [useExcel, setuseExcel] = React.useState(null);
+  const [startKeepingTrack, setStartKeepingTrack] = React.useState(null);
 
   const [feedback1, setFeedback1] = React.useState('');
   const [feedback2, setFeedback2] = React.useState('');
@@ -60,12 +64,17 @@ const FeedbackForm = (props) => {
       feedback: [feedback1, feedback2, feedback3, feedback4],
       username: user.username,
       email: user.email,
+      keepTrackofFinance: keepTrackofFinance === 'true' ? true : false,
+      trackWithApp: trackWithApp === 'true' ? true : false,
+      useExcel: useExcel === 'true' ? true : false,
+      startKeepingTrack: startKeepingTrack === 'true' ? true : false,
     };
 
-    await httpProvider
-      .post(`${BASE_URL}/feedback`, feedbackObject)
-      .then((data) => alert(`Thank your for your feedback!`) + props.history.push('/dashboard'))
-      .catch((e) => console.error(e));
+    console.log(feedbackObject);
+    // await httpProvider
+    //   .post(`${BASE_URL}/feedback`, feedbackObject)
+    //   .then((data) => alert(`Thank your for your feedback!`) + props.history.push('/dashboard'))
+    //   .catch((e) => console.error(e));
 
     setLoading(false);
   };
@@ -81,6 +90,7 @@ const FeedbackForm = (props) => {
       </div>
     );
   }
+
   return (
     <div>
       <h4>Thanks for using Perfinly! We would love to hear from you</h4>
@@ -97,6 +107,102 @@ const FeedbackForm = (props) => {
           </Form.Group>
           <hr />
 
+          <h5>
+            Please help us know a bit more about your financial habits:
+          </h5>
+          <p></p>
+          <Form.Group className='mb-3'>
+            <Form.Label> I currently keep track of my finances (spending and balances)</Form.Label>
+            <br />
+            <Form.Check
+              value={true}
+              onClick={(e) => setKeepTrackofFinance(e.target.value)}
+              inline
+              label='Yes'
+              name='group1'
+              type='radio'
+            />
+            <Form.Check
+              value={false}
+              onClick={(e) => setKeepTrackofFinance(e.target.value)}
+              inline
+              label='No'
+              name='group1'
+              type='radio'
+            />
+          </Form.Group>
+
+          {keepTrackofFinance === 'true' ? (
+            <div>
+              <Form.Group className='mb-3'>
+                <Form.Label> I currently use an app to track my finances</Form.Label>
+                <br />
+                <Form.Check
+                  value={true}
+                  onClick={(e) => setTrackWithApp(e.target.value)}
+                  inline
+                  label='Yes'
+                  name='group2'
+                  type='radio'
+                />
+                <Form.Check
+                  value={false}
+                  onClick={(e) => setTrackWithApp(e.target.value)}
+                  inline
+                  label='No'
+                  name='group2'
+                  type='radio'
+                />
+              </Form.Group>{' '}
+              <Form.Group className='mb-3'>
+                <Form.Label> I currently use Excel to track my finances</Form.Label>
+                <br />
+                <Form.Check
+                  value={true}
+                  onClick={(e) => setuseExcel(e.target.value)}
+                  inline
+                  label='Yes'
+                  name='group3'
+                  type='radio'
+                />
+                <Form.Check
+                  value={false}
+                  onClick={(e) => setuseExcel(e.target.value)}
+                  inline
+                  label='No'
+                  name='group3'
+                  type='radio'
+                />
+              </Form.Group>
+            </div>
+          ) : (
+            <></>
+          )}
+          {keepTrackofFinance === 'false' ? (
+            <Form.Group className='mb-3'>
+              <Form.Label> I would like to start keeping track of my finances</Form.Label>
+              <br />
+              <Form.Check
+                value={true}
+                onClick={(e) => setStartKeepingTrack(e.target.value)}
+                inline
+                label='Yes'
+                name='group3'
+                type='radio'
+              />
+              <Form.Check
+                value={false}
+                onClick={(e) => setStartKeepingTrack(e.target.value)}
+                inline
+                label='No'
+                name='group3'
+                type='radio'
+              />
+            </Form.Group>
+          ) : (
+            <></>
+          )}
+          <hr/>
           <h6>
             Please rate the following aspects of the app with 5 Stars to agree and 1 to disagree
           </h6>
@@ -166,6 +272,100 @@ const FeedbackForm = (props) => {
             </Form.Label>
           </Form.Group>
 
+          <h6>
+            Please help us know a bit more about your financial habits:
+          </h6>
+          <Form.Group className='mb-3'>
+            <Form.Label> I currently keep track of my finances (spending and balances)?</Form.Label>
+            <br />
+            <Form.Check
+              value={true}
+              onClick={(e) => setKeepTrackofFinance(e.target.value)}
+              inline
+              label='Yes'
+              name='group1'
+              type='radio'
+            />
+            <Form.Check
+              value={false}
+              onClick={(e) => setKeepTrackofFinance(e.target.value)}
+              inline
+              label='No'
+              name='group1'
+              type='radio'
+            />
+          </Form.Group>
+
+          {keepTrackofFinance === 'true' ? (
+            <div>
+              <Form.Group className='mb-3'>
+                <Form.Label> I currently use an app to track my finances</Form.Label>
+                <br />
+                <Form.Check
+                  value={true}
+                  onClick={(e) => setTrackWithApp(e.target.value)}
+                  inline
+                  label='Yes'
+                  name='group2'
+                  type='radio'
+                />
+                <Form.Check
+                  value={false}
+                  onClick={(e) => setTrackWithApp(e.target.value)}
+                  inline
+                  label='No'
+                  name='group2'
+                  type='radio'
+                />
+              </Form.Group>{' '}
+              <Form.Group className='mb-3'>
+                <Form.Label> I currently use Excel to track my finances</Form.Label>
+                <br />
+                <Form.Check
+                  value={true}
+                  onClick={(e) => setuseExcel(e.target.value)}
+                  inline
+                  label='Yes'
+                  name='group3'
+                  type='radio'
+                />
+                <Form.Check
+                  value={false}
+                  onClick={(e) => setuseExcel(e.target.value)}
+                  inline
+                  label='No'
+                  name='group3'
+                  type='radio'
+                />
+              </Form.Group>
+            </div>
+          ) : (
+            <></>
+          )}
+          {keepTrackofFinance === 'false' ? (
+            <Form.Group className='mb-3'>
+              <Form.Label> I would like to start keeping track of my finances</Form.Label>
+              <br />
+              <Form.Check
+                value={true}
+                onClick={(e) => setStartKeepingTrack(e.target.value)}
+                inline
+                label='Yes'
+                name='group3'
+                type='radio'
+              />
+              <Form.Check
+                value={false}
+                onClick={(e) => setStartKeepingTrack(e.target.value)}
+                inline
+                label='No'
+                name='group3'
+                type='radio'
+              />
+            </Form.Group>
+          ) : (
+            <></>
+          )}
           <hr />
           <Form.Group className='mb-3'>
             <Form.Label>General Feeback</Form.Label>

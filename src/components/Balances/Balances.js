@@ -11,6 +11,7 @@ import PieChart from './../Charts/PieChart/PieChart';
 import useComponentVisible from './../../hooks/useComponentVisible';
 import currencyProvider from '../../providers/CurrencyProvider';
 import AuthContext from '../../context/AuthContext';
+import getSymbolFromCurrency from 'currency-symbol-map';
 
 const Balances = () => {
   const [error, setError] = useState(null);
@@ -175,7 +176,7 @@ const Balances = () => {
           <div className='balances-chart-section'>
             <PieChart
               data={balances.map((b) => b.amount)}
-              labels={balances.map((b) => b.description)}
+              labels={balances.map((b) => `${b.description} (${getSymbolFromCurrency(currency)})`)}
               height={'375px'}
               width={'355px'}
               title={`Balances Total: ${currency} ${currencyProvider
@@ -184,7 +185,7 @@ const Balances = () => {
             />
             <PieChart
               data={balancesByType.map((b) => b.amount)}
-              labels={balancesByType.map((b) => b.name)}
+              labels={balancesByType.map((b) =>  `${b.name} (${getSymbolFromCurrency(currency)})`)}
               height={'375px'}
               width={'355px'}
               title={`Balances By Type: ${currency} ${currencyProvider
@@ -195,7 +196,7 @@ const Balances = () => {
           <div className='balances-chart-section'>
             <PieChart
               data={liabilities.map((b) => b.amount)}
-              labels={liabilities.map((b) => b.description)}
+              labels={liabilities.map((b) =>  `${b.description} (${getSymbolFromCurrency(currency)})`)}
               height={'375px'}
               width={'355px'}
               title={`Liabilites Total: ${currency} (${currencyProvider
@@ -205,7 +206,7 @@ const Balances = () => {
             />
             <PieChart
               data={liabilitiesByType.map((b) => b.amount)}
-              labels={liabilitiesByType.map((b) => b.name)}
+              labels={liabilitiesByType.map((b) =>  `${b.name} (${getSymbolFromCurrency(currency)})`)}
               height={'375px'}
               width={'355px'}
               title={`Liabilites By Type: ${currency} (${currencyProvider
