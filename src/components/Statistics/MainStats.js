@@ -303,7 +303,9 @@ const MainStats = () => {
           title={lineChartTitle()}
         />
       )}
-      {history.location.pathname.includes('table') && (
+      <br/>
+      <br/>
+      {history.location.pathname.includes('daily-table') && (
         <PieChart
           data={spendByCategoryThisMonth.map((s) => s.amount)}
           labels={spendByCategoryThisMonth.map(
