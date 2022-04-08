@@ -48,6 +48,14 @@
   align-items: stretch;
 }
 
+
+@media screen and (min-width: 100px) and (max-width: 700px) {
+  .day-picker-component {
+    max-width: 400px;
+  }
+}
+
+
 .day-picker-options {
   display: flex;
   flex-direction: column;

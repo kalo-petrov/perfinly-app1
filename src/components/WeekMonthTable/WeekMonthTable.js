@@ -96,7 +96,7 @@ const WeekMonthTable = ({
           </select>
         </div>
         <div className='by-week-table-option'>
-          <Button onClick={() => filterResults()}>Filter</Button>
+          <Button variant='outline-primary' onClick={() => filterResults()}>Filter</Button>
         </div>
         <div className='by-week-table-option'>
           <Button variant='outline-secondary' onClick={() => resetResults()}>

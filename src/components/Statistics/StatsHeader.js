@@ -7,17 +7,15 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/esm/Button';
 import useComponentVisible from './../../hooks/useComponentVisible';
 
-const StatsHeader = ({
-  fromDate,
-  toDate,
-  applyDates,
-  setFromDate,
-  setToDate,
-  setRefreshed,
-}) => {
+const StatsHeader = ({ fromDate, toDate, applyDates, setFromDate, setToDate, setRefreshed }) => {
   const [enteredTo, setEnteredTo] = useState(null);
-  
-  const { ref, isComponentVisible: toggleDayPicker, setIsComponentVisible: setToggleDayPicker } = useComponentVisible(false);
+  const history = useHistory();
+  const [selectedStats, setSelectedStats] = useState(history.location.pathname.slice(12));
+  const {
+    ref,
+    isComponentVisible: toggleDayPicker,
+    setIsComponentVisible: setToggleDayPicker,
+  } = useComponentVisible(false);
 
   const modifiers = {
     start: new Date(fromDate),
@@ -44,7 +42,6 @@ const StatsHeader = ({
   };
 
   const { url } = useRouteMatch();
-  const history = useHistory();
 
   const isSelectingFirstDay = (from, to, day) => {
     const isBeforeFirstDay = from && DateUtils.isDayBefore(day, from);
@@ -113,9 +110,9 @@ const StatsHeader = ({
           <Link to={`${url}/daily-table`}>
             {' '}
             <Button
-              variant='outline-primary'
+              variant={selectedStats === 'daily-table' ? 'primary' : 'outline-primary'}
               name='daily-table'
-              onClick={() => history.push(`/daily-table`)}
+              onClick={() => history.push(`/daily-table`) + setSelectedStats('daily-table')}
             >
               Daily Table
             </Button>{' '}
@@ -124,9 +121,9 @@ const StatsHeader = ({
         <div className='stats-header-section-item'>
           <Link to={`${url}/weekly-table`}>
             <Button
-              variant='outline-primary'
+              variant={selectedStats === 'weekly-table' ? 'primary' : 'outline-primary'}
               name='weekly-table'
-              onClick={() => history.push(`/weekly-table`)}
+              onClick={() => history.push(`/weekly-table`) + setSelectedStats('weekly-table')}
             >
               Weekly Table
             </Button>
@@ -135,9 +132,9 @@ const StatsHeader = ({
         <div className='stats-header-section-item'>
           <Link to={`${url}/monthly-table`}>
             <Button
-              variant='outline-primary'
+               variant={selectedStats === 'monthly-table' ? 'primary' : 'outline-primary'}
               name='monthly-table'
-              onClick={() => history.push(`/monthly-table`)}
+              onClick={() => history.push(`/monthly-table`) + setSelectedStats('monthly-table')}
             >
               Monthly Table
             </Button>
@@ -146,9 +143,9 @@ const StatsHeader = ({
         <div className='stats-header-section-item'>
           <Link to={`${url}/all-expenses`}>
             <Button
-              variant='outline-primary'
+              variant={selectedStats === 'all-expenses' ? 'primary' : 'outline-primary'}
               name='all-expenses'
-              onClick={() => history.push(`/all-expenses`)}
+              onClick={() => history.push(`/all-expenses`) + setSelectedStats('all-expenses`')}
             >
               All Expenses
             </Button>
@@ -161,7 +158,7 @@ const StatsHeader = ({
             <input
               className='input-date-picker'
               type='text'
-              value={`${moment(fromDate).format('yyyy-MM-DD')} --- ${moment(toDate).format(
+              value={`${moment(fromDate).format('yyyy-MM-DD')} -- ${moment(toDate).format(
                 'yyyy-MM-DD'
               )}`}
               onClick={() => setToggleDayPicker((prev) => !prev)}
@@ -220,7 +217,7 @@ const StatsHeader = ({
           </div>
         </div>
         <div className='stats-filter-item'>
-          <Button variant='primary' onClick={() => setRefreshed((prev) => !prev)}>
+          <Button variant='outline-primary' onClick={() => setRefreshed((prev) => !prev)}>
             Refresh
           </Button>
         </div>
