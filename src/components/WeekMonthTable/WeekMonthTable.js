@@ -108,10 +108,10 @@ const WeekMonthTable = ({
         <table className='week-month-table'>
           <thead>
             <tr>
-              <th className='table-header-cell' style={{ width: '100px' }} key={1} scope='col'>
+              <th className='table-header-cell' style={{ minWidth: '120px' }} key={1} scope='col'>
                 Date
               </th>
-              <th className='table-header-cell' style={{ width: '80px' }} key={2} scope='col'>
+              <th className='table-header-cell' style={{ minWidth: '100px' }} key={2} scope='col'>
                 Total
               </th>
             </tr>
@@ -123,7 +123,7 @@ const WeekMonthTable = ({
                     <tr key={d.weekStart}>
                       <th>
                         {' '}
-                        {d.weekStart} - {d.weekEnd}
+                        {d.weekStart} / {d.weekEnd}
                       </th>
                       <th>
                         {' '}
@@ -144,7 +144,7 @@ const WeekMonthTable = ({
               : dateProvider.anyPeriodMonthly(confirmedFromDate, confirmedToDate)?.map((d) => {
                   return (
                     <tr key={d}>
-                      <th> {d}</th>
+                      <th> {moment(d).format('MMMM YYYY')}</th>
                       <th>
                         {getSymbolFromCurrency(currency)}{' '}
                         {currencyProvider
@@ -161,7 +161,7 @@ const WeekMonthTable = ({
                     </tr>
                   );
                 })}
-            <tr>
+              <tr className='daily-table-bottom-row'>
               <th> Total On Page</th>
               <th>
                 {getSymbolFromCurrency(currency)}{' '}

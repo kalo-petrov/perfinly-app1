@@ -66,7 +66,6 @@ const AllExpenses = ({
     setCategory('');
   };
 
-
   useEffect(() => {
     httpProvider
       .get(`${BASE_URL}/balances`)
@@ -198,10 +197,7 @@ const AllExpenses = ({
               <th className='expenses-thead' onClick={() => requestSort('subcategory_id')}>
                 Subcategory
               </th>
-              <th className='expenses-thead' onClick={() => requestSort('balance_id')}>
-                Paid with Balance
-              </th>
-              <th>Actions</th>
+              <th className='expenses-thead'>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -211,10 +207,10 @@ const AllExpenses = ({
                   <td>{record.description}</td>
                   <td>{record.amount.toLocaleString()}</td>
                   <td>{record.currency}</td>
-                  <td>{(record.date).slice(0,10)}</td>
+                  <td>{record.date.slice(0, 10)}</td>
                   <td>{categories.find((c) => c._id === record.category_id)?.name}</td>
                   <td>{subcategories.find((sc) => sc._id === record.subcategory_id)?.name}</td>
-                  <td>{balances.find((b) => b._id === record.balance_id)?.description}</td>
+
                   <td>
                     <FeatherIcon
                       icon='edit'
@@ -224,11 +220,11 @@ const AllExpenses = ({
                 </tr>
               );
             })}
-            <tr style={{fontWeight: '700'}}>
+            <tr style={{ fontWeight: '700', backgroundColor: '#e1e1e1' }}>
               <td>Total</td>
               <td>{currencyProvider.sumToMainCurrency(thisMonthSpendRecords).toLocaleString()}</td>
               <td>{currency}</td>
-
+              <td colSpan={4}></td>
             </tr>
           </tbody>
         </table>
