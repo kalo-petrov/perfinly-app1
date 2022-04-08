@@ -40,13 +40,13 @@ const ByDayByCategoryTable = ({
           </Button>
         </div>
       </div>
-      <table>
+      <table className='by-day-table'>
         <thead>
           <tr>
-            <th className='table-header-cell' style={{ width: '100px' }} key={1} scope='col'>
+            <th className='table-header-cell' style={{ minWidth: '95px', maxWidth: '100px' }} key={1} scope='col'>
               Date
             </th>
-            <th className='table-header-cell' style={{ width: '80px' }} key={2} scope='col'>
+            <th className='table-header-cell' style={{ minWidth: '80px' }} key={2} scope='col'>
               Total
             </th>
             {(catOrSubCat === 'cat' ? categories : subcategories)?.map((c) => {
@@ -64,12 +64,14 @@ const ByDayByCategoryTable = ({
               <tr key={d}>
                 <th> {d}</th>
                 <th>
-                  {currencyProvider.sumToMainCurrency(
-                    allSpendRecords.filter(
-                      (sp) => new Date(sp.date).getDate() === new Date(d).getDate()
-                    )
-                  ).toLocaleString()}{' '}
                   {getSymbolFromCurrency(currency)}
+                  {currencyProvider
+                    .sumToMainCurrency(
+                      allSpendRecords.filter(
+                        (sp) => new Date(sp.date).getDate() === new Date(d).getDate()
+                      )
+                    )
+                    .toLocaleString()}
                 </th>
                 {(catOrSubCat === 'cat' ? categories : subcategories)?.map((c) => {
                   const spendsForDayAndCategory = allSpendRecords.filter((r) => {
@@ -115,21 +117,24 @@ const ByDayByCategoryTable = ({
               </tr>
             );
           })}
-          <tr>
+          <tr className='daily-table-bottom-row'>
             <th> Total On Page</th>
             <th>
-              {currencyProvider.sumToMainCurrency(allSpendRecords).toLocaleString()}{' '}
-              {getSymbolFromCurrency(currency)}{' '}
+              {getSymbolFromCurrency(currency)}
+              {currencyProvider.sumToMainCurrency(allSpendRecords).toLocaleString()}
             </th>
             {(catOrSubCat === 'cat' ? categories : subcategories)?.map((c) => {
               return (
                 <td key={c._id}>
-                  {currencyProvider.sumToMainCurrency(
-                    allSpendRecords.filter(
-                      (sp) => (catOrSubCat === 'cat' ? sp.category_id : sp.subcategory_id) === c._id
+                  {getSymbolFromCurrency(currency)}
+                  {currencyProvider
+                    .sumToMainCurrency(
+                      allSpendRecords.filter(
+                        (sp) =>
+                          (catOrSubCat === 'cat' ? sp.category_id : sp.subcategory_id) === c._id
+                      )
                     )
-                  ).toLocaleString() || '0'}{' '}
-                  {getSymbolFromCurrency(currency)}{' '}
+                    .toLocaleString() || '0'}
                 </td>
               );
             })}
