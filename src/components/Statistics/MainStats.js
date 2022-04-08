@@ -1,7 +1,7 @@
 import './MainStats.css';
 import moment from 'moment';
 import { useHistory } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import httpProvider from '../../providers/httpProvider';
 import { BASE_URL } from '../../common/constants';
 import CreateSpendRecord from './../CreateSpendRecord/CreateSpendRecord';
@@ -19,6 +19,9 @@ import AllExpenses from '../AllExpenses/AllExpenses';
 import Loader from './../Base/Loader/Loader';
 import useComponentVisible from './../../hooks/useComponentVisible';
 import currencyProvider from '../../providers/CurrencyProvider';
+import PieChart from '../Charts/PieChart/PieChart';
+import AuthContext from '../../context/AuthContext';
+import getSymbolFromCurrency from 'currency-symbol-map';
 
 const MainStats = () => {
   const [categories, setCategories] = useState([]);
@@ -37,6 +40,7 @@ const MainStats = () => {
 
   const [thisMonthSpendRecords, setThisMonthSpendRecords] = useState([]);
   const [refreshed, setRefreshed] = useState(false);
+  const [spendByCategoryThisMonth, setSpendByCategoryThisMonth] = useState([]);
   const dispatch = useDispatch();
 
   const {
@@ -54,17 +58,10 @@ const MainStats = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      const mapped = new Map();
+      const OBJArr = [];
+
       setLoading(true);
-      await httpProvider
-        .get(`${BASE_URL}/spend-categories`)
-        .then((data) => {
-          if (data.error) {
-            setError(data.error.toString());
-          } else {
-            setCategories(data);
-          }
-        })
-        .catch((error) => setError(error.toString()));
 
       await httpProvider
         .get(`${BASE_URL}/spend-categories/1/all-subcategories`)
@@ -83,8 +80,41 @@ const MainStats = () => {
           if (data.error) {
             setError(data.error.toString());
           } else {
-            dispatch(getAllSpendRecords(data))
-            setThisMonthSpendRecords(data)
+            dispatch(getAllSpendRecords(data));
+            setThisMonthSpendRecords(data);
+
+            for (const element of data) {
+              const amount = mapped.get(element.category_id) || 0;
+              mapped.set(
+                element.category_id,
+                amount +
+                  currencyProvider.convertToMainCurrency({
+                    amount: element.amount,
+                    currency: element.currency,
+                  }).amount
+              );
+            }
+
+          }
+        })
+        .catch((error) => setError(error.toString()));
+
+        await httpProvider
+        .get(`${BASE_URL}/spend-categories`)
+        .then((data) => {
+          if (data.error) {
+            setError(data.error.toString());
+          } else {
+            setCategories(data);
+            for (const [key, value] of mapped) {
+              OBJArr.push({
+                category_id: key,
+                amount: value,
+                name: data.find((c) => c._id === key)?.name,
+                currency: getSymbolFromCurrency(currency),
+              });
+            }
+            setSpendByCategoryThisMonth(OBJArr.sort((a, b) => b.amount - a.amount));
           }
         })
         .catch((error) => setError(error.toString()));
@@ -102,6 +132,8 @@ const MainStats = () => {
     // };
   }, [confirmedFromDate, confirmedToDate, refreshed]);
 
+  const currency = useContext(AuthContext).user.currency;
+
   const applyDates = async () => {
     setLoading(true);
     const from = moment(fromDate).format('yyyy-MM-DD');
@@ -116,12 +148,11 @@ const MainStats = () => {
           setError(data.error.toString());
         } else {
           setThisMonthSpendRecords(data);
-          dispatch(getAllSpendRecords(data))
+          dispatch(getAllSpendRecords(data));
           setLoading(false);
         }
       })
       .catch((error) => setError(error.toString()));
-      
   };
 
   const labelArray = () => {
@@ -137,7 +168,6 @@ const MainStats = () => {
       return [0, 1];
     }
   };
-
 
   const allSpendRecords = useSelector((state) => state.spendRecords);
 
@@ -168,7 +198,8 @@ const MainStats = () => {
           allSpendRecords.filter(
             (sr) =>
               moment(sr.date.slice(0, 10)).format('yyyy-MM-DD') >= d.slice(0, 10) &&
-              moment(sr.date.slice(0, 10)).format('yyyy-MM-DD') < moment(d.slice(0, 10)).add(1, 'month').format('yyyy-MM-DD')
+              moment(sr.date.slice(0, 10)).format('yyyy-MM-DD') <
+                moment(d.slice(0, 10)).add(1, 'month').format('yyyy-MM-DD')
           )
         );
       });
@@ -270,6 +301,19 @@ const MainStats = () => {
           dataArray={dataArray()}
           label=''
           title={lineChartTitle()}
+        />
+      )}
+      {history.location.pathname.includes('table') && (
+        <PieChart
+          data={spendByCategoryThisMonth.map((s) => s.amount)}
+          labels={spendByCategoryThisMonth.map(
+            (s) => `${s.name} (${getSymbolFromCurrency(currency)})`
+          )}
+          height={'445px'}
+          width={'425px'}
+          title={`Spend By Category This Month: Total:  ${currency} ${currencyProvider
+            .sumToMainCurrency(allSpendRecords)
+            .toLocaleString()}`}
         />
       )}
     </div>
