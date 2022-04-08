@@ -1,4 +1,3 @@
-
 .categories-table-container {
   margin: auto auto;
   width: 70%;
@@ -11,30 +10,33 @@
     width: 90%;
     margin-bottom: 30px;
   }
-  
+
 }
+
 @media screen and (min-width: 800px) and (max-width: 1200px) {
   .categories-table-container {
     margin: auto auto;
     width: 80%;
     margin-bottom: 30px;
   }
-  
 }
 
-
+/* 
 .categories-table {
-  border: 1px solid rgb(0, 0, 0);
+  border: 0.5px solid rgb(0, 0, 0);
   width: 100%;
-}
+} */
 
 .categories-table th {
-  border: 1px solid rgb(0, 0, 0);
-  background-color: #FF5F15;
+  background-color: #696969;
+  color: #ffffff;
+  text-align: center;
+  min-width: 110px;
+
 }
 
 .categories-table td {
-  border: 1px solid rgb(0, 0, 0);
+  border: 0.5px solid rgb(71, 71, 71)
 }
 
 .categories-row {
@@ -42,20 +44,21 @@
 }
 
 .subcategories-cell {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: flex-start;
-	align-items: flex-end;
-	align-content: space-around;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-end;
+  align-content: space-around;
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-.single-subcategory{
-  border: 0.5px solid #0d2a91;
+.single-subcategory {
+  border: 1px solid #363636;
   border-radius: 5px;
   margin: 4px;
+  margin-bottom: 10px;
   padding: 2px;
   padding-left: 4px;
   padding-right: 4px;
@@ -64,4 +67,20 @@
 
 .feather-icons-edit-delete {
   cursor: pointer;
+}
+
+.bootstrap-buttons {
+  line-height: 0.4 !important;
+  font-size: 95% !important;
+  margin: 4px;
+  padding: 2px;
+  padding-left: 4px;
+  padding-right: 4px;
+
+}
+
+.categories-input {
+  font-size: 85%;
+  margin: 4px;
+  border-radius: 5px;
 }

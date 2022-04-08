@@ -87,7 +87,7 @@ const Categories = () => {
         }
       })
       .catch((error) => setError(error.toString()));
-      setLoading2(false);
+    setLoading2(false);
   };
 
   const editCategory = async () => {
@@ -150,6 +150,7 @@ const Categories = () => {
         })
         .catch((error) => setError(error.toString()));
     } else {
+      setLoading2(false);
       return;
     }
     setLoading2(false);
@@ -185,7 +186,7 @@ const Categories = () => {
         }
       })
       .catch((error) => setError(error.toString()));
-      setLoading2(false);
+    setLoading2(false);
   };
 
   const deleteSubcategory = async (e, subcategory_name, category_id, subcat_id) => {
@@ -223,9 +224,10 @@ const Categories = () => {
         })
         .catch((error) => setError(error.toString()));
     } else {
+      setLoading2(false);
       return;
     }
-     setLoading2(false);
+    setLoading2(false);
   };
 
   return (
@@ -237,11 +239,18 @@ const Categories = () => {
         onChange={(e) => setNewCategory(e.target.value)}
         type='text'
         placeholder='New Category...'
+        style={{ lineHeight: '1.5' }}
         // style={{height: '35px'}}
       />{' '}
+      <p></p>
       <Button onClick={() => addCategory()}>Add New Category</Button>
-
-      {loading2 ? <Loader height={'3.5em'} width={'2.5em'} /> : (<div><br/></div>)}
+      {loading2 ? (
+        <Loader height={'3.5em'} width={'2.5em'} />
+      ) : (
+        <div>
+          <br />
+        </div>
+      )}
       <div className='categories-table-container'>
         {loading ? (
           <Loader />
@@ -249,7 +258,7 @@ const Categories = () => {
           <table className='categories-table'>
             <thead>
               <tr>
-                <th className='categories-row'>Category</th>
+                <th className='categories-row'>Categories</th>
                 <th>Subcategories</th>
               </tr>
             </thead>
@@ -264,14 +273,20 @@ const Categories = () => {
                           <input
                             type='text'
                             value={categoryNameToEdit}
+                            className='categories-input'
                             onChange={(e) => setCategoryNameToEdit(e.target.value)}
                           />
                           <br />
-                          <Button variant='outline-primary' onClick={() => editCategory()}>
+                          <Button
+                            className='bootstrap-buttons'
+                            variant='outline-primary'
+                            onClick={() => editCategory()}
+                          >
                             Save
                           </Button>
                           <Button
                             variant='outline-secondary'
+                            className='bootstrap-buttons'
                             onClick={() =>
                               setCategoryNameToEdit(cat.name) +
                               setToggleEditCategory(false) +
@@ -288,6 +303,7 @@ const Categories = () => {
                         <FeatherIcon
                           icon='edit'
                           size='15px'
+                          color='#0d67dc'
                           className='feather-icons-edit-delete'
                           onClick={() =>
                             setToggleEditCategory(true) +
@@ -299,6 +315,7 @@ const Categories = () => {
                           icon='trash-2'
                           className='feather-icons-edit-delete'
                           size='15px'
+                          color='#0d67dc'
                           onClick={() => deleteCategory(cat.name, cat._id)}
                         />
                       </span>
@@ -315,15 +332,18 @@ const Categories = () => {
                                   <input
                                     type='text'
                                     value={subcategoryNameToEdit}
+                                    className='categories-input'
                                     onChange={(e) => setSubcategoryNameToEdit(e.target.value)}
                                   />
                                   <Button
+                                    className='bootstrap-buttons'
                                     variant='outline-primary'
                                     onClick={() => editSubcategory()}
                                   >
                                     Save
                                   </Button>
                                   <Button
+                                    className='bootstrap-buttons'
                                     variant='outline-secondary'
                                     onClick={() =>
                                       setSelectedCategory('') +
@@ -340,6 +360,7 @@ const Categories = () => {
                                   <FeatherIcon
                                     icon='edit-2'
                                     size='12px'
+                                    color='#0d67dc'
                                     className='feather-icons-edit-delete'
                                     onClick={() =>
                                       setToggleEditSubcategory(true) +
@@ -351,6 +372,7 @@ const Categories = () => {
                                   <FeatherIcon
                                     icon='trash-2'
                                     size='12px'
+                                    color='#0d67dc'
                                     className='feather-icons-edit-delete'
                                     onClick={(e) => deleteSubcategory(e, sc.name, cat._id, sc._id)}
                                   />
@@ -367,10 +389,10 @@ const Categories = () => {
                         {(selectedCategory !== cat._id || !selectedCategory) && (
                           <Button
                             variant='outline-primary'
-                            className='single-subcategory'
+                            className='bootstrap-buttons'
                             onClick={() => setToggleAddSubCat(true) + setSelectedCategory(cat._id)}
                           >
-                            ++Add
+                            +Add Subcategory
                           </Button>
                         )}
 
@@ -380,12 +402,18 @@ const Categories = () => {
                               value={newSubcategory}
                               onChange={(e) => setNewSubcategory(e.target.value)}
                               type='text'
+                              className='categories-input'
                               placeholder='New Subcategory...'
                             />{' '}
-                            <Button variant='outline-primary' onClick={() => addSubcategory()}>
+                            <Button
+                              className='bootstrap-buttons'
+                              variant='outline-primary'
+                              onClick={() => addSubcategory()}
+                            >
                               Add
                             </Button>{' '}
                             <Button
+                              className='bootstrap-buttons'
                               variant='outline-secondary'
                               onClick={() => setToggleAddSubCat(false) + setSelectedCategory('')}
                             >

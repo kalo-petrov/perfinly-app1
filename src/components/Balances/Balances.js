@@ -216,11 +216,11 @@ const Balances = () => {
           </div>
 
           <div className='balances-table-container'>
-            <table>
+            <table className='balances-table'>
               <thead>
-                <tr>
+                <tr className='balances-header'>
                   <th>Balance Type</th>
-                  <th>Balances</th>
+                  <th style={{minWidth: '250px'}}>Balances</th>
                   <th>Totals</th>
                 </tr>
               </thead>
@@ -278,8 +278,8 @@ const Balances = () => {
                     </tr>
                   );
                 })}
-                <tr>
-                  <th colSpan={2}>Totals</th>
+                <tr className='balances-table-bottom-row'>
+                  <th colSpan={2}>Total Net Worth</th>
                   <th>
                     {currency}{' '}
                     {(

@@ -18,11 +18,31 @@
   padding: 10px;
 }
 
+.balances-table {
+  border: 0.5px solid grey;
+}
+.balances-table td {
+  border: none;
+}
+
 .balances-table-container {
   margin: auto auto;
-  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
   margin-bottom: 30px;
+  overflow: auto;
 
+}
+.balances-header {
+  background-color: #696969;
+  color: #ffffff;
+  text-align: center;
+  min-width: 110px;
+
+}
+
+.balances-header th {
+  min-width: 130px;
 }
 
 .individual-balance {
@@ -36,4 +56,9 @@
 
 .individual-balance:hover {
   background-color: rgb(200, 229, 255);
+}
+
+.balances-table-bottom-row {
+  background-color: #e1e1e1;
+  font-weight: 500;
 }
