@@ -160,7 +160,7 @@ const CreateSpendRecord = ({
 
   return (
     <div className='create-spend-modal'>
-      <h4>Add A Spend</h4>
+      <h4>Add an Expense</h4>
       {error && <Error error={error} setError={setError} />}
       {loading && <Loader height={'3.5em'} width={'2.5em'} />}
       <CloseButtoon className='close-btn' onClick={() => setToggleAddSpend(false)} />
@@ -219,6 +219,7 @@ const CreateSpendRecord = ({
           <Form.Group>
             <Form.Control
               name='date'
+              id='date-create-spend'
               type='date'
               value={moment(date).format('yyyy-MM-DD')}
               className={verificationMessage.includes('date') ? 'unverified-input' : 'ok'}

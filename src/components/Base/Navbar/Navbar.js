@@ -129,7 +129,7 @@ const Navbar = () => {
       <div className='top-right-navbar'>
         <div className='top-right-navbar-item'>
           <Button variant='primary' onClick={() => setToggleAddSpend((prev) => !prev)}>
-            Add Spend
+            Add Expense
           </Button>
         </div>
 

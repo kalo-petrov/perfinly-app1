@@ -48,3 +48,18 @@
   border-color: red;
 }
 
+
+
+::-webkit-calendar-picker-indicator {
+  background: transparent;
+  bottom: 0;
+  color: transparent;
+  cursor: pointer;
+  width: auto;
+  height: auto;
+  left: 0;
+  position: absolute;
+  right: 20px;
+  top: 0;
+  border: 1px solid red;
+}
