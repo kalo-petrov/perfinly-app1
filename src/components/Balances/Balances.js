@@ -149,6 +149,9 @@ const Balances = () => {
             setBalancesByType={setBalancesByType}
             types={types}
             balances={balances}
+            liabilities={liabilities}
+            setLiabilities={setLiabilities}
+            setLiabilitiesByType={setLiabilitiesByType}
           />
         </div>
       )}

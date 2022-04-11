@@ -17,6 +17,9 @@ const EditBalance = ({
   balances,
   types,
   setBalancesByType,
+  liabilities,
+  setLiabilities,
+  setLiabilitiesByType,
 }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(null);
@@ -26,11 +29,14 @@ const EditBalance = ({
   const [amount, setAmount] = useState(selectedBalance.amount);
   const [currency, setCurrency] = useState(selectedBalance.currency);
   const [type, setType] = useState(selectedBalance.type_id);
-  const [isLiability, setIsLiability] = useState(false);
+  const [isLiability, setIsLiability] = useState(selectedBalance.is_liability);
 
   const submitEditedBalance = async (e) => {
     e.preventDefault();
     setLoading(true);
+    let mappedBalances = new Map();
+    let mappedLiabilities = new Map();
+
     const balanceObject = {
       description,
       amount: Number(amount),
@@ -64,16 +70,31 @@ const EditBalance = ({
           setError(data.error);
         } else {
           setBalances((prev) =>
-            prev.map((sr) => {
-              if (sr._id === selectedBalance._id) {
-                return { ...sr, ...balanceObject };
-              } else {
-                return sr;
-              }
-            })
+            prev
+              .map((b) => {
+                if (b._id === selectedBalance._id) {
+                  return { ...b, ...balanceObject };
+                } else {
+                  return b;
+                }
+              })
+              .filter((d) => !d.is_liability)
+              .sort((a, b) => b.amount - a.amount)
           );
 
-          let mapped = new Map();
+          setLiabilities((prev) =>
+            prev
+              .map((b) => {
+                if (b._id === selectedBalance._id) {
+                  return { ...b, ...balanceObject };
+                } else {
+                  return b;
+                }
+              })
+              .filter((d) => d.is_liability)
+              .sort((a, b) => b.amount - a.amount)
+          );
+
           for (const element of [
             ...balances.map((sr) => {
               if (sr._id === selectedBalance._id) {
@@ -82,9 +103,29 @@ const EditBalance = ({
                 return sr;
               }
             }),
-          ]) {
-            const amount = mapped.get(element.type_id) || 0;
-            mapped.set(
+          ].filter((d) => !d.is_liability)) {
+            const amount = mappedBalances.get(element.type_id) || 0;
+            mappedBalances.set(
+              element.type_id,
+              amount +
+                currencyProvider.convertToMainCurrency({
+                  amount: element.amount,
+                  currency: element.currency,
+                }).amount
+            );
+          }
+
+          for (const element of [
+            ...liabilities.map((sr) => {
+              if (sr._id === selectedBalance._id) {
+                return { ...sr, ...balanceObject };
+              } else {
+                return sr;
+              }
+            }),
+          ].filter((d) => d.is_liability)) {
+            const amount = mappedBalances.get(element.type_id) || 0;
+            mappedBalances.set(
               element.type_id,
               amount +
                 currencyProvider.convertToMainCurrency({
@@ -95,8 +136,21 @@ const EditBalance = ({
           }
 
           setBalancesByType([]);
-          for (const [key, value] of mapped) {
+          for (const [key, value] of mappedBalances) {
             setBalancesByType((prev) =>
+              [
+                ...prev,
+                {
+                  type_id: key,
+                  amount: value,
+                  name: types.find((type) => type._id === key)?.name,
+                },
+              ].sort((a, b) => b.amount - a.amount)
+            );
+          }
+          setLiabilitiesByType([]);
+          for (const [key, value] of mappedLiabilities) {
+            setLiabilitiesByType((prev) =>
               [
                 ...prev,
                 {
@@ -129,11 +183,14 @@ const EditBalance = ({
             setError(data.error);
           } else {
             setBalances((prev) => prev.filter((r) => r._id !== selectedBalance._id));
+            setLiabilities((prev) => prev.filter((r) => r._id !== selectedBalance._id));
 
-            let mapped = new Map();
+            let mappedBalances = new Map();
+            let mappedLiabilities = new Map();
+
             for (const element of balances.filter((r) => r._id !== selectedBalance._id)) {
-              const amount = mapped.get(element.type_id) || 0;
-              mapped.set(
+              const amount = mappedBalances.get(element.type_id) || 0;
+              mappedBalances.set(
                 element.type_id,
                 amount +
                   currencyProvider.convertToMainCurrency({
@@ -142,9 +199,20 @@ const EditBalance = ({
                   }).amount
               );
             }
-  
-            setBalancesByType([]);
-            for (const [key, value] of mapped) {
+            for (const element of balances.filter((r) => r._id !== selectedBalance._id)) {
+              const amount = mappedLiabilities.get(element.type_id) || 0;
+              mappedLiabilities.set(
+                element.type_id,
+                amount +
+                  currencyProvider.convertToMainCurrency({
+                    amount: element.amount,
+                    currency: element.currency,
+                  }).amount
+              );
+            }
+
+            setBalancesByType([]); 
+            for (const [key, value] of mappedBalances) {
               setBalancesByType((prev) =>
                 [
                   ...prev,
@@ -156,8 +224,19 @@ const EditBalance = ({
                 ].sort((a, b) => b.amount - a.amount)
               );
             }
-
-
+            setLiabilitiesByType([]);
+            for (const [key, value] of mappedLiabilities) {
+              setLiabilitiesByType((prev) =>
+                [
+                  ...prev,
+                  {
+                    type_id: key,
+                    amount: value,
+                    name: types.find((type) => type._id === key)?.name,
+                  },
+                ].sort((a, b) => b.amount - a.amount)
+              );
+            }
             setToggleEditBalance(false);
           }
         })
@@ -217,6 +296,7 @@ const EditBalance = ({
                 isLiability ? `(Will be reflected as a negative balance!)` : ''
               }`}
               value={isLiability}
+              checked={isLiability}
               onChange={() => setIsLiability((prev) => !prev)}
             />
           </div>
