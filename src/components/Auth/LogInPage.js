@@ -62,6 +62,7 @@ const LogInPage = (props) => {
       .then((data) => {
         if (!data.token) {
           setLoading(false);
+          setError(data.error)
           throw new Error(data.error);
         }
 
@@ -97,6 +98,7 @@ const LogInPage = (props) => {
       .then((data) => {
         if (!data.token) {
           setLoading(false);
+          setError(data.error)
           throw new Error(data.error);
         }
         // eslint-disable-next-line react/prop-types

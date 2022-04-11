@@ -97,9 +97,9 @@ const RegisterPage = (props) => {
   };
   const path = `${BASE_URL}/auth/signup`;
 
-  const handleRegister = (ev) => {
+  const handleRegister = async (ev) => {
     ev.preventDefault();
-
+    setLoading(true)
     const userObj = {
       username: usernameControl.value,
       password: passwordControl.value,
@@ -109,15 +109,18 @@ const RegisterPage = (props) => {
       role: 'basic',
     };
 
-    httpProvider.post(path, userObj).then((data) => {
+   await httpProvider.post(path, userObj).then((data) => {
       console.log(data);
       if (data.error) {
+        setError(data.error)
         console.error(`${data.error}`, 'Try Again', 'error');
       } else {
+        alert('Successful Registration')
         console.log('Successful Registration!', '', 'success');
         props.history.push('/signin');
       }
     });
+    setLoading(false)
   };
 
   const { setLoginState } = useContext(AuthContext);
@@ -141,6 +144,7 @@ const RegisterPage = (props) => {
       .then((data) => {
         if (!data.token) {
           setLoading(false);
+          setError(data.error)
           throw new Error(data.error);
         }
         // eslint-disable-next-line react/prop-types
