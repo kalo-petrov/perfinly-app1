@@ -9,6 +9,7 @@ import Button from 'react-bootstrap/esm/Button';
 import CreateSpendRecord from './../../CreateSpendRecord/CreateSpendRecord';
 import FeatherIcon from 'feather-icons-react';
 import useComponentVisible from './../../../hooks/useComponentVisible';
+import Dashboard from './../../Dashboard/Dashboard';
 
 const Navbar = () => {
   const { user, setLoginState } = useContext(AuthContext);
@@ -47,9 +48,23 @@ const Navbar = () => {
         </div>
         <div className='top-left-navbar-item'>
           <Link
+            to='/dashboard'
+            className={
+              selectedMenu === 'dashboard'
+                ? 'text-left-navbar-text-selected'
+                : 'text-left-navbar-text'
+            }
+            onClick={(e) => changeMenu(e)}
+            name='dashboard'
+          >
+            Dashboard
+          </Link>
+        </div>
+        <div className='top-left-navbar-item'>
+          <Link
             to='/statistics'
             className={
-              selectedMenu === 'statistics'
+              selectedMenu.includes('statistics') 
                 ? 'text-left-navbar-text-selected'
                 : 'text-left-navbar-text'
             }

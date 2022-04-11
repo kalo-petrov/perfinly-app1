@@ -285,11 +285,10 @@ function Dashboard() {
           </div>
           <div className='total-spend-dashboard-item'>
             <LineChart
-              labelArray={sixMonthsLabels().map((l) => l.monthEnd)}
+            className='line-chart-dashboard'
+              labelArray={sixMonthsLabels().map((l) => moment(l.monthEnd).format(`MMMM 'YY`))}
               dataArray={lastSixMonthsSpend}
               label={`monthly spend (in ${currency})`}
-              // height={'100px'}
-              // width={'100px'}
               title='Last 6 Months Expenditure'
             />
           </div>

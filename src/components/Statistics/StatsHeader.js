@@ -90,9 +90,9 @@ const StatsHeader = ({ fromDate, toDate, applyDates, setFromDate, setToDate, set
     setFromDate(new Date(moment().startOf('month')));
     setToDate(new Date(moment()));
   };
-  const thisMonth = () => {
-    setFromDate(new Date(moment().startOf('month')));
-    setToDate(new Date(moment().endOf('month')));
+  const last30dDays = () => {
+    setFromDate(new Date(moment().subtract(1, 'month')));
+    setToDate(new Date(moment()));
   };
   const lastMonth = () => {
     setFromDate(new Date(moment().subtract(1, 'month').startOf('month')));
@@ -191,8 +191,8 @@ const StatsHeader = ({ fromDate, toDate, applyDates, setFromDate, setToDate, set
                   <Button variant='outline-dark' onClick={monthToDate}>
                     Month To Date
                   </Button>
-                  <Button variant='outline-dark' onClick={thisMonth}>
-                    This Month
+                  <Button variant='outline-dark' onClick={last30dDays}>
+                    Last 30 days
                   </Button>
                   <Button variant='outline-dark' onClick={lastMonth}>
                     Last Month
