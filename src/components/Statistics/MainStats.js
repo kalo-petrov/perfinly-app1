@@ -311,8 +311,8 @@ const MainStats = () => {
           labels={spendByCategoryThisMonth.map(
             (s) => `${s.name} (${getSymbolFromCurrency(currency)})`
           )}
-          height={'445px'}
-          width={'425px'}
+          height={'375px'}
+          width={'325px'}
           title={`Spend By Category This Month: Total:  ${currency} ${currencyProvider
             .sumToMainCurrency(allSpendRecords)
             .toLocaleString()}`}

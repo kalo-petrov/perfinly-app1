@@ -6,6 +6,7 @@ import moment from 'moment';
 import Error from '../Base/Error/Error';
 import Button from 'react-bootstrap/esm/Button';
 import Form from 'react-bootstrap/esm/Form';
+import CloseButtoon from 'react-bootstrap/esm/CloseButton';
 import Loader from '../Base/Loader/Loader';
 import currencyList from '../../providers/currencyList.json';
 import AuthContext from '../../context/AuthContext';
@@ -162,6 +163,7 @@ const CreateSpendRecord = ({
       <h4>Add A Spend</h4>
       {error && <Error error={error} setError={setError} />}
       {loading && <Loader height={'3.5em'} width={'2.5em'} />}
+      <CloseButtoon className='close-btn' onClick={() => setToggleAddSpend(false)} />
       <br />
       {verificationMessage && <p>{verificationMessage} required</p>}
       <Form className='create-spend-fields-container'>
