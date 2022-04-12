@@ -39,6 +39,8 @@ const Users = () => {
               <th className='user-table-head' onClick={() => requestSort('last_name')}>Last Name</th>
               <th className='user-table-head' onClick={() => requestSort('role')}>Role</th>
               <th className='user-table-head' onClick={() => requestSort('last_login')}>Last Login</th>
+              <th className='user-table-head' onClick={() => requestSort('logins')}># of Logins</th>
+              <th className='user-table-head' onClick={() => requestSort('registration_date')}>Join Date</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -52,6 +54,8 @@ const Users = () => {
                   <td>{au.last_name}</td>
                   <td>{au.role}</td>
                   <td>{au.last_login && moment(au.last_login).format('h:mm:ss (DD-MMM-YYYY)')}</td>
+                  <td>{Number(au?.logins?.length || '')}</td>
+                  <td>{au?.registration_date && moment(au?.registration_date).format('h:mm:ss (DD-MMM-YYYY)')}</td>
                   <td></td>
                 </tr>
               ) 
