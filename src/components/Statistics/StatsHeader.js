@@ -145,7 +145,7 @@ const StatsHeader = ({ fromDate, toDate, applyDates, setFromDate, setToDate, set
             <Button
               variant={selectedStats === 'all-expenses' ? 'primary' : 'outline-primary'}
               name='all-expenses'
-              onClick={() => history.push(`/all-expenses`) + setSelectedStats('all-expenses`')}
+              onClick={() => history.push(`/all-expenses`) + setSelectedStats('all-expenses')}
             >
               All Expenses
             </Button>
