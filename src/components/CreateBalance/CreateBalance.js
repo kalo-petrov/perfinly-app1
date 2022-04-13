@@ -29,7 +29,27 @@ const CreateBalance = ({
   const [amount, setAmount] = useState('init');
   const [currency, setCurrency] = useState(user.currency);
   const [type, setType] = useState('none');
+  const [typesLoc, setTypes] = useState(types);
   const [isLiability, setIsLiability] = useState(false);
+
+  useEffect(() => {
+    const getBalances = async () => {
+      setLoading2(true)
+      await httpProvider
+        .get(`${BASE_URL}/balance-types`)
+        .then((data) => {
+          if (data.error) {
+            setError(data.error.toString());
+          } else {
+            setTypes(data);
+          }
+        })
+        .catch((e) => setError(e));
+        setLoading2(false)
+    };
+
+    getBalances();
+  }, []);
 
   const submitBalance = (e) => {
     e.preventDefault();
@@ -65,8 +85,16 @@ const CreateBalance = ({
         if (data.error) {
           setError(data.error);
         } else {
-          setBalances((prev) => [...prev, balanceObject].filter((d) => !d.is_liability).sort((a, b) => b.amount - a.amount));
-          setLiabilities((prev) => [...prev, balanceObject].filter((d) => d.is_liability).sort((a, b) => b.amount - a.amount));
+          setBalances((prev) =>
+            [...prev, balanceObject]
+              .filter((d) => !d.is_liability)
+              .sort((a, b) => b.amount - a.amount)
+          );
+          setLiabilities((prev) =>
+            [...prev, balanceObject]
+              .filter((d) => d.is_liability)
+              .sort((a, b) => b.amount - a.amount)
+          );
 
           let mappedBalances = new Map();
           let mappedLiabilities = new Map();
@@ -101,7 +129,7 @@ const CreateBalance = ({
                 {
                   type_id: key,
                   amount: value,
-                  name: types.find((type) => type._id === key)?.name,
+                  name: typesLoc.find((type) => type._id === key)?.name,
                 },
               ].sort((a, b) => b.amount - a.amount)
             );
@@ -114,7 +142,7 @@ const CreateBalance = ({
                 {
                   type_id: key,
                   amount: value,
-                  name: types.find((type) => type._id === key)?.name,
+                  name: typesLoc.find((type) => type._id === key)?.name,
                 },
               ].sort((a, b) => b.amount - a.amount)
             );
@@ -126,8 +154,6 @@ const CreateBalance = ({
     };
     submitData();
   };
-
-
 
   return (
     <div className='create-balance-modal'>
@@ -189,7 +215,7 @@ const CreateBalance = ({
             <option key={0.1} value='none' disabled hidden>
               {loading2 ? 'Loading...' : 'Select Type'}
             </option>
-            {types?.map((t) => {
+            {typesLoc?.map((t) => {
               return (
                 <option key={t._id} value={t._id}>
                   {t.name}
