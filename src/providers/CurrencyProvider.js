@@ -1,6 +1,12 @@
 import { extractUser } from '../context/AuthContext';
 
-export const getCurrencyRates = () => JSON.parse(localStorage.getItem('currency_rates')) || {};
+export const getCurrencyRates = () => {
+  try {
+    return JSON.parse(localStorage.getItem('currency_rates') || { '': '' }) || '';
+  } catch {
+    return { '': ' ' };
+  }
+}
 export const getMainCurrency = () => extractUser(localStorage.getItem('token'))?.currency || '';
 
 const sumToMainCurrency = (arrayOfAmountsWithCurrencies = [{ amount: 0, currency: 'USD' }]) => {

@@ -1,8 +1,14 @@
 import { createContext } from 'react';
 import jwtDecode from 'jwt-decode';
 
-export const getToken = () => localStorage.getItem('token') || '';      
-export const getCurrencyRates = () => JSON.parse(localStorage.getItem('currency_rates')) || {};      
+export const getToken = () => localStorage.getItem('token') || '';
+export const getCurrencyRates = () => {
+  try {
+    return JSON.parse(localStorage.getItem('currency_rates') || { '': '' }) || '';
+  } catch {
+    return { '': ' ' };
+  }
+};
 
 export const extractUser = (token) => {
   try {
@@ -19,5 +25,4 @@ const AuthContext = createContext({
   setLoginState: () => {},
 });
 
-
-export default  AuthContext;
+export default AuthContext;

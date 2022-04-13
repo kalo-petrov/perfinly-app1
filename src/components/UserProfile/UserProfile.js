@@ -7,6 +7,7 @@ import { Button } from 'react-bootstrap';
 import AuthContext, { extractUser } from '../../context/AuthContext';
 import Loader from './../Base/Loader/Loader';
 import currencyList from './../../providers/currencyList.json'
+import { getCurrencyRates } from './../../providers/CurrencyProvider';
 
 const required = (value) => value.trim().length >= 1;
 const minLen = (len) => (value) => value.trim().length >= len;
@@ -15,10 +16,12 @@ const samePassword = () => (pass, ref) => pass === ref;
 // const regex = (pattern) => (value) => pattern.test(value);
 
 const UserProfile = () => {
+  const { setLoginState, currency_rates, user } = React.useContext(AuthContext);
+
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
   const [changePassword, setchangePassword] = React.useState(false);
-  const [currency, setCurrency] = React.useState('USD');
+  const [currency, setCurrency] = React.useState(user?.currency);
   const [usernameControl, setUsernameControl] = React.useState({
     value: '',
     valid: false,
@@ -119,7 +122,7 @@ const UserProfile = () => {
     }
   };
 
-  const { setLoginState, currency_rates } = React.useContext(AuthContext);
+
 
   const handleSubmit = async (e) => {
     setLoading(true)
@@ -137,7 +140,7 @@ const UserProfile = () => {
    await httpProvider.put(`${BASE_URL}/auth/info`, userObj).then((data) => {
       if (data.error) {
         setLoading(false);
-        console.error(`${data.error}`, 'Try Again', 'error');
+        setError(data.error)
       } else {
         localStorage.setItem('token', data.token);
         localStorage.setItem('currency_rates', JSON.stringify( data?.conversion_rates));
@@ -147,13 +150,7 @@ const UserProfile = () => {
             user: extractUser(data.token),
             currency_rates: data.conversion_rates,
           });
-        } else {
-          setLoginState({
-            isLoggedIn: !!extractUser(data.token),
-            user: extractUser(data.token),
-            currency_rates,
-          });
-        }
+        } 
       }
     })
     setLoading(false);
