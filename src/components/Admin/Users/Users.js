@@ -15,7 +15,6 @@ const Users = () => {
           return;
         }
         setActiveUsers(data.users);
-
       });
     };
     fetchData();
@@ -23,29 +22,44 @@ const Users = () => {
 
   const { items, requestSort } = useSortableData(activeUsers);
 
-
-
   return (
     <div>
       <h3>Users</h3>
-    <h4>Total: {activeUsers.length}</h4>
+      <h4>Total: {activeUsers.length}</h4>
       <div>
         <table>
           <thead>
             <tr>
-              <th className='user-table-head' onClick={() => requestSort('username')}>Username</th>
-              <th className='user-table-head' onClick={() => requestSort('email')}>Email</th>
-              <th className='user-table-head' onClick={() => requestSort('first_name')}>First Name</th>
-              <th className='user-table-head' onClick={() => requestSort('last_name')}>Last Name</th>
-              <th className='user-table-head' onClick={() => requestSort('role')}>Role</th>
-              <th className='user-table-head' onClick={() => requestSort('last_login')}>Last Login</th>
-              <th className='user-table-head' onClick={() => requestSort('logins')}># of Logins</th>
-              <th className='user-table-head' onClick={() => requestSort('registration_date')}>Join Date</th>
+              <th className='user-table-head' onClick={() => requestSort('username')}>
+                Username
+              </th>
+              <th className='user-table-head' onClick={() => requestSort('email')}>
+                Email
+              </th>
+              <th className='user-table-head' onClick={() => requestSort('first_name')}>
+                First Name
+              </th>
+              <th className='user-table-head' onClick={() => requestSort('last_name')}>
+                Last Name
+              </th>
+              <th className='user-table-head' onClick={() => requestSort('role')}>
+                Role
+              </th>
+              <th className='user-table-head' onClick={() => requestSort('last_login')}>
+                Last Login
+              </th>
+              <th className='user-table-head' onClick={() => requestSort('logins')}>
+                # of Logins
+              </th>
+              <th className='user-table-head' onClick={() => requestSort('registration_date')}>
+                Join Date
+              </th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {items?.map(au => {
+            {items?.map((au) => {
+              const timeZone = new Date(au.last_login).toString().match(/([A-Z]+[\+-][0-9]+)/)[1];
               return (
                 <tr key={au._id}>
                   <td>{au.username}</td>
@@ -53,12 +67,19 @@ const Users = () => {
                   <td>{au.first_name}</td>
                   <td>{au.last_name}</td>
                   <td>{au.role}</td>
-                  <td>{au.last_login && moment(au.last_login).format('h:mm:ss (DD-MMM-YYYY)')}</td>
+                  <td>
+                    {au.last_login &&
+                      moment(au.last_login).format('h:mm:ss (DD-MMM-YYYY)') + ` (${timeZone})`}
+                  </td>
                   <td>{Number(au?.logins?.length || '')}</td>
-                  <td>{au?.registration_date && moment(au?.registration_date).format('h:mm:ss (DD-MMM-YYYY)')}</td>
+                  <td>
+                    {au?.registration_date &&
+                      moment(au?.registration_date).format('h:mm:ss (DD-MMM-YYYY)') +
+                        ` (${timeZone})`}
+                  </td>
                   <td></td>
                 </tr>
-              ) 
+              );
             })}
           </tbody>
         </table>

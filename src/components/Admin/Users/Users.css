@@ -1,3 +1,4 @@
 .user-table-head {
     cursor: pointer;
+    min-width: 80px;
 }
