@@ -38,6 +38,7 @@ function App() {
         user: null,
       });
       localStorage.removeItem('token');
+      localStorage.removeItem('currency_rates');
     }
   }, [authValue.user?.exp, history]);
 

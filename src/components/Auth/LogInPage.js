@@ -53,6 +53,7 @@ const LogInPage = (props) => {
       body: JSON.stringify({
         username: usernameControl.value,
         password: passwordControl.value,
+        device: navigator,
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -62,7 +63,7 @@ const LogInPage = (props) => {
       .then((data) => {
         if (!data.token) {
           setLoading(false);
-          setError(data.error)
+          setError(data.error);
           throw new Error(data.error);
         }
 
@@ -84,11 +85,19 @@ const LogInPage = (props) => {
       console.log('Google-signin-error');
       return;
     }
+
+    const device = {
+      userAgent: navigator.userAgent,
+      userAgentData: navigator?.userAgentData,
+      platform: navigator?.platform,
+      language: navigator.language
+    };
     setLoading(true);
     await fetch(`${BASE_URL}/auth/signin-google`, {
       method: 'POST',
       body: JSON.stringify({
         token: googleData.tokenId,
+        device,
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -98,7 +107,7 @@ const LogInPage = (props) => {
       .then((data) => {
         if (!data.token) {
           setLoading(false);
-          setError(data.error)
+          setError(data.error);
           throw new Error(data.error);
         }
         // eslint-disable-next-line react/prop-types
