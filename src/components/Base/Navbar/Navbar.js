@@ -14,7 +14,12 @@ import Dashboard from './../../Dashboard/Dashboard';
 const Navbar = () => {
   const { user, setLoginState } = useContext(AuthContext);
   const history = useHistory();
-  const [selectedMenu, setSelectedMenu] = useState(history.location.pathname.slice(1,30));
+  const [selectedMenu, setSelectedMenu] = useState(
+    history.location.pathname.slice(1, 30) === 'signin'
+      ? 'dashboard'
+      : history.location.pathname.slice(1, 30)
+  );
+
 
   const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
   const {
@@ -27,7 +32,6 @@ const Navbar = () => {
     setSelectedMenu(e.target.name || e.target.id);
   };
 
-
   const handleLogOut = (e) => {
     e.preventDefault();
     httpProvider.deleteReq(`${BASE_URL}/auth/signout`, {}).then((data) => console.log(data));
@@ -35,8 +39,6 @@ const Navbar = () => {
     localStorage.removeItem('token');
     history.push('/login');
   };
-
- 
 
   return (
     <div className='navbar-container'>
@@ -64,7 +66,7 @@ const Navbar = () => {
           <Link
             to='/statistics'
             className={
-              selectedMenu.includes('statistics') 
+              selectedMenu.includes('statistics')
                 ? 'text-left-navbar-text-selected'
                 : 'text-left-navbar-text'
             }
@@ -169,19 +171,19 @@ const Navbar = () => {
                   Edit Profile
                 </Link>
               </div>
-              <div  className='user-info-item-action' >
+              <div className='user-info-item-action'>
                 <Link
                   to='/feedback'
                   name='feedback'
                   style={{ textDecoration: 'none', color: 'black' }}
-                  onClick={(e) =>  changeMenu(e) + setIsComponentVisible(false)}
+                  onClick={(e) => changeMenu(e) + setIsComponentVisible(false)}
                 >
                   Give us Feedback
                 </Link>
               </div>
               <div
                 className='user-info-item-action'
-                onClick={(e) =>  handleLogOut(e)}
+                onClick={(e) => handleLogOut(e)}
                 style={{ cursor: 'pointer' }}
               >
                 Logout
